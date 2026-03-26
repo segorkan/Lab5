@@ -1,4 +1,5 @@
 
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class Main {
             System.exit(1);
         }
 
+        System.out.println("Все продукты перенесены. Можно вводить команды.");
         try {
             while (sc.hasNext()) {
                 ArrayList<String> parts = new ArrayList<>(Arrays.asList(sc.nextLine().trim().split(" ")));

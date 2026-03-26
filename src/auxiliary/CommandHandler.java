@@ -37,11 +37,11 @@ public class CommandHandler {
             Product minProduct = CollectionHandler.getInstance().getMin();
             if (newProduct.compareTo(minProduct) < 0) {
                 CollectionHandler.getInstance().addElement(newProduct);
-                Product.incrementId();
+                Product.incrementGlobalId();
             }
         } catch (NoSuchElementException e) {
             CollectionHandler.getInstance().addElement(newProduct);
-            Product.incrementId();
+            Product.incrementGlobalId();
         }
     }
 
@@ -212,7 +212,7 @@ public class CommandHandler {
         }
     }
 
-    public Product makeElementFromCSV(Scanner sc, boolean isNew) {
+    public Product makeElementFromCSV(Scanner sc) {
         try {
             int id = validateId(sc);
             String name = validateName(sc);
@@ -222,9 +222,13 @@ public class CommandHandler {
             String partNumber = validatePartNumber(sc);
             UnitOfMeasure unitofMeasure = validateUnitOfMeasure(sc);
             Person owner = validatePerson(sc);
-            return new Product(name, coords, price, partNumber, unitofMeasure, owner, isNew);
+            return new Product(id, name, coords, date, price, partNumber, unitofMeasure, owner);
         } catch (IOException | NumberFormatException | CommandNotFoundException e) {
             System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+            System.exit(1);
+            return null;
+        } catch (Exception e){
+            System.out.println("Исключение");
             System.exit(1);
             return null;
         }
@@ -232,7 +236,7 @@ public class CommandHandler {
 
     public void show() {
         for (Product elem : CollectionHandler.getInstance().getCollection()) {
-            System.out.println(elem);
+            System.out.println(elem.toString());
         }
     }
 }

@@ -4,14 +4,14 @@ import java.util.Objects;
 import java.util.Date;
 
 public class Product implements Comparable<Product> {
-    private int id;
-    private String name;
-    private Coordinates coordinates;
-    private Date creationDate;
-    private Float price;
-    private String partNumber;
-    private UnitOfMeasure unitOfMeasure;
-    private Person owner;
+    private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private String name; //Поле не может быть null, Строка не может быть пустой
+    private Coordinates coordinates; //Поле не может быть null
+    private Date creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    private Float price; //Поле может быть null, Значение поля должно быть больше 0
+    private String partNumber; //Длина строки должна быть не меньше 24, Поле не может быть null
+    private UnitOfMeasure unitOfMeasure; //Поле не может быть null
+    private Person owner; //Поле может быть null
     private static int idCount = 1;
     private static final float eps = 0.000000001f;
 
@@ -30,7 +30,19 @@ public class Product implements Comparable<Product> {
         }
     }
 
-    public static void incrementId(){
+    public Product(int id, String name, Coordinates coordinates, Date creationDate, Float price, String partNumber,
+                   UnitOfMeasure unitOfMeasure, Person owner){
+        this.id = id;
+        this.name = name;
+        this.coordinates = coordinates;
+        this.creationDate = creationDate;
+        this.price = price;
+        this.partNumber = partNumber;
+        this.unitOfMeasure = unitOfMeasure;
+        this.owner = owner;
+    }
+
+    public static void incrementGlobalId(){
         idCount += 1;
     }
 
@@ -123,15 +135,15 @@ public class Product implements Comparable<Product> {
 
     @Override
     public String toString() {
-        return String.format("id: " + id + "[\n" +
-                "\t" + "name = %s" +
-                "\t" + "coordinates = %s" +
-                "\t" + "creationDate = %s" +
-                "\t" + "price = %.5f" +
-                "\t" + "partNumber = %s" +
-                "\t" + "%s" +
-                "\t" + "%s" +
-                "\n]");
+        return String.format("id: " + id + " [\n" +
+                "\t" + "name = %s" + "\n" +
+                "\t" + "coordinates = %s" + "\n" +
+                "\t" + "creationDate = %s" + "\n" +
+                "\t" + "price = %.5f" + "\n" +
+                "\t" + "partNumber = %s" + "\n" +
+                "\t" + "Unit Of Measure = %s" + "\n" +
+                "\t" + "Owner = %s" + "\n" + "]"
+                , getName(), getCoordinates(), getDate(), getPrice(), getPartNumber(), getUnitOfMeasure(), getOwner());
     }
     private Boolean compareFloat(float other) {
         if (Math.abs(price - other) < eps) {

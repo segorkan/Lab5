@@ -3,8 +3,8 @@ package objects;
 import java.util.Objects;
 
 public class Coordinates {
-    private Integer x;
-    private float y;
+    private Integer x; //Значение поля должно быть больше -352, Поле не может быть null
+    private float y; //Значение поля должно быть больше -765
     private static final float eps = 0.000000001f;
 
     public Coordinates(int x, float y) {

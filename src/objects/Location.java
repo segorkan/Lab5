@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Location {
     private int x;
     private float y;
-    private String name;
+    private String name; //Длина строки не должна быть больше 563, Поле не может быть null
     private static final float eps = 0.000000001f;
 
     public Location(int x, float y, String name){

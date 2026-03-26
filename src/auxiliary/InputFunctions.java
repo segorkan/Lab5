@@ -7,11 +7,13 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.Date;
 import java.util.Scanner;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 
 public class InputFunctions {
 
-    public static String validateName(Scanner sc) throws IOException {
+    public static String validateName(Scanner sc){
         while (true) {
             output("Введите имя name:");
             String name = sc.nextLine();
@@ -29,7 +31,7 @@ public class InputFunctions {
         }
     }
 
-    public static int validateId(Scanner sc) throws NumberFormatException{
+    public static int validateId(Scanner sc){
         String stringId = sc.nextLine();
         try {
             if (stringId == null){
@@ -44,18 +46,19 @@ public class InputFunctions {
         }
     }
 
-    public static Date validateDate(Scanner sc) throws NumberFormatException{
+    public static Date validateDate(Scanner sc){
         String dateString = sc.nextLine();
         try {
             if (dateString == null){
                 throw new NullPointerException();
             }
-            int id = Integer.parseInt(stringId.trim());
-            return id;
-        } catch (NumberFormatException | NullPointerException e){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date date = dateFormat.parse(dateString);
+            return date;
+        } catch (ParseException | NullPointerException e){
             System.out.println("Проблема с данными в исходном файле. Последний продукт некорректен.");
             System.exit(1);
-            return 0;
+            return new Date();
         }
     }
 
@@ -74,6 +77,7 @@ public class InputFunctions {
                 if (price <= 0) {
                     throw new IOException("Цена price должна быть больше 0.");
                 }
+                return price;
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "price обязана иметь тип float.");
                 if (CurrentInput.getInputStream() != System.in){
@@ -110,7 +114,7 @@ public class InputFunctions {
     }
 
     public static Coordinates validateCoordinates(Scanner sc) {
-        output("Начало ввода координаты.");
+        output("Начало ввода координаты." + "\n");
         Integer x = validateCoordinateX(sc);
         float y = validateCoordinateY(sc);
         return new Coordinates(x, y);
@@ -149,7 +153,7 @@ public class InputFunctions {
 
     private static float validateCoordinateY(Scanner sc) {
         while (true) {
-            output("Введите координату Y (число > -765):");
+            output("Введите координату Y (вещественное число > -765):");
             String ystring = sc.nextLine();
             try {
                 float y = Float.parseFloat(ystring.trim());
@@ -199,16 +203,16 @@ public class InputFunctions {
             output("Хотите ли вы ввести владельца продукта? (Y/N):");
             try {
                 String answer = sc.nextLine().trim();
-                if (answer == "Y") {
+                if (answer.equals("Y")) {
                     output("Начинаю ввод владельца.");
                     String name = validateName(sc);
                     long weight = validateWeight(sc);
-                    Color eyeColor = validateColor(sc);
-                    Color hairColor = validateColor(sc);
+                    Color eyeColor = validateColor(sc, "глаза");
+                    Color hairColor = validateColor(sc, "волос");
                     Country nationality = validateNationality(sc);
                     Location location = validateLocation(sc);
                     return new Person(name, weight, eyeColor, hairColor, nationality, location);
-                } else if (answer == "N") {
+                } else if (answer.equals("N")) {
                     return null;
                 } else {
                     throw new IOException("Ответ должен быть Y или N.");
@@ -253,9 +257,9 @@ public class InputFunctions {
         }
     }
 
-    public static Color validateColor(Scanner sc) {
+    public static Color validateColor(Scanner sc, String addition) {
         while (true) {
-            output("Введите цвет (возможны RED, BLACK, BLUE, WHITE, ORANGE, BROWN):");
+            output("Введите цвет " + addition + " (возможны RED, BLACK, BLUE, WHITE, ORANGE, BROWN):");
             String color = sc.nextLine();
             try {
                 if (color == null || color.isBlank()) {
@@ -277,7 +281,7 @@ public class InputFunctions {
             String country = sc.nextLine();
             try {
                 if (country == null || country.isBlank()) {
-                    throw new IOException("Единица измерения не может быть пустой.");
+                    throw new IOException("Национальность не может быть пустой.");
                 }
                 return Country.valueOf(country.trim());
             } catch (IOException e) {
@@ -299,12 +303,12 @@ public class InputFunctions {
             output("Хотите ли вы ввести место нахождения человека? (Y/N):");
             try {
                 String answer = sc.nextLine().trim();
-                if (answer == "Y") {
+                if (answer.equals("Y")) {
                     int x = validateLocationX(sc);
                     float y = validateLocationY(sc);
                     String name = validateLocationName(sc);
                     return new Location(x, y, name);
-                } else if (answer == "N") {
+                } else if (answer.equals("N")) {
                     return null;
                 } else {
                     throw new IOException("Ответ должен быть Y или N.");
@@ -320,7 +324,7 @@ public class InputFunctions {
 
     public static int validateLocationX(Scanner sc) {
         while (true) {
-            output("Введите координату X:");
+            output("Введите координату X (целое число int):");
             String xstring = sc.nextLine();
             try {
                 int x = Integer.parseInt(xstring.trim());
@@ -336,7 +340,7 @@ public class InputFunctions {
 
     public static float validateLocationY(Scanner sc) {
         while (true) {
-            output("Введите координату Y:");
+            output("Введите координату Y (вещественное число float):");
             String ystring = sc.nextLine();
             try {
                 float y = Float.parseFloat(ystring.trim());

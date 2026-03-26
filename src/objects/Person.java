@@ -3,12 +3,12 @@ package objects;
 import java.util.Objects;
 
 public class Person{
-    private String name;
-    private long weight;
-    private Color eyeColor;
-    private Color hairColor;
-    private Country nationality;
-    private Location location;
+    private String name; //Поле не может быть null, Строка не может быть пустой
+    private long weight; //Значение поля должно быть больше 0
+    private Color eyeColor; //Поле может быть null
+    private Color hairColor; //Поле может быть null
+    private Country nationality; //Поле не может быть null
+    private Location location; //Поле может быть null
 
     public Person(String name, long weight, Color eyeColor, Color hairColor, Country nationality, Location location) {
         this.name = name;
@@ -61,7 +61,12 @@ public class Person{
 
     @Override
     public String toString() {
-        return String.format("Person: [name = %s, weight = %d, eyeColor = %s, hairColor = %s, nationality = %s, location = %s]",
+        return String.format("Person[name = %s" +
+                        ", weight = %d" +
+                        ", eyeColor = %s" +
+                        ", hairColor = %s" +
+                        ", nationality = %s" +
+                        ", location = %s]",
                 name, weight, eyeColor, hairColor, nationality, location);
     }
 }

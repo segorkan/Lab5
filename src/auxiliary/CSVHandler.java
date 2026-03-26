@@ -1,8 +1,8 @@
 package auxiliary;
 
 import com.opencsv.*;
-import commands.Command;
 import exceptions.FileProblemException;
+import exceptions.NoEnvironmentVariableException;
 import exceptions.WrongFormatException;
 import objects.Product;
 
@@ -12,9 +12,10 @@ import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.LinkedHashSet;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CSVHandler {
 
@@ -30,7 +31,7 @@ public class CSVHandler {
         return CSVHandler.instance;
     }
 
-    public void read(Path csvPath) throws IOException, FileProblemException, WrongFormatException {
+    public void read(Path csvPath) throws IOException, NoEnvironmentVariableException, FileProblemException, WrongFormatException {
         if (Files.exists(csvPath)) {
             if (Files.isReadable(csvPath) && Files.isRegularFile(csvPath)) {
                 if (!csvPath.getFileName().toString().toLowerCase().endsWith(".csv")) {
@@ -56,7 +57,7 @@ public class CSVHandler {
                 throw new FileProblemException("Передан неверный файл: файл нельзя прочитать.");
             }
         } else {
-            throw new IOException("Файла с именем в переменной окружения не существует.");
+            throw new NoEnvironmentVariableException("Файла с именем в переменной окружения не существует.");
         }
     }
 
@@ -73,12 +74,12 @@ public class CSVHandler {
             CurrentInput.changeInputStream(Files.newInputStream(newObject));
             CommandHandler commandHandler = CommandHandler.getInstance();
             Scanner sc = new Scanner(CurrentInput.getInputStream());
-            Product product = commandHandler.makeElement(sc, true);
+            Product product = commandHandler.makeElementFromCSV(sc);
             CurrentInput.changeInputStream(original);
 
             if (sc.hasNextLine()) {
                 sc.close();
-                throw new IOException("Некорректный ввод Product.");
+                throw new IOException("Проблема с данными в исходном файле. Последний продукт некорректен.");
             }
             sc.close();
             CollectionHandler.getInstance().addElement(product);
@@ -101,9 +102,13 @@ public class CSVHandler {
 
                         ArrayList<String> productMembers = new ArrayList<String>();
 
+                        productMembers.add(Integer.toString(product.getId()));
                         productMembers.add(product.getName());
                         productMembers.add(Integer.toString(product.getCoordinates().getX()));
                         productMembers.add(Float.toString(product.getCoordinates().getY()));
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                        String formattedDate = dateFormat.format(product.getDate());
+                        productMembers.add(formattedDate);
                         try {
                             productMembers.add(Float.toString(product.getPrice()));
                         } catch (NullPointerException e) {
