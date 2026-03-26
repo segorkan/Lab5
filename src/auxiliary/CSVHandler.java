@@ -61,7 +61,7 @@ public class CSVHandler {
     }
 
     public void parseProduct(String[] line) throws IOException {
-        Path newObject = Paths.get("src/resources/new_object.txt");
+        Path newObject = Paths.get("resources/new_object.txt");
         try (OutputStreamWriter writer = new OutputStreamWriter(new BufferedOutputStream(Files.newOutputStream(
                 newObject, StandardOpenOption.TRUNCATE_EXISTING)))) {
             for (String obj : line) {
