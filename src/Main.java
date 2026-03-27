@@ -46,26 +46,26 @@ public class Main {
 
         try {
             String csvPath = System.getenv("FILE_NAME");
-            if (csvPath == null){
+            if (csvPath == null) {
                 throw new NoEnvironmentVariableException();
             }
             Path path = Paths.get(csvPath);
             CSVHandler handler = CSVHandler.getInstance();
             handler.read(path);
-        } catch (InvalidPathException e){
+        } catch (InvalidPathException e) {
             System.out.println("В переменной окружения FILE_NAME находится неверный путь.");
             System.exit(1);
-        } catch (NoEnvironmentVariableException e){
+        } catch (NoEnvironmentVariableException e) {
             System.out.println("Не существует переданной переменной окружения.");
             System.exit(1);
-        } catch (IOException | WrongFormatException e){
+        } catch (IOException | WrongFormatException e) {
             System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
             System.exit(1);
         }
 
         System.out.println("Все продукты перенесены. Можно вводить команды.");
-        try {
-            while (sc.hasNext()) {
+        while (sc.hasNext()) {
+            try {
                 ArrayList<String> parts = new ArrayList<>(Arrays.asList(sc.nextLine().trim().split(" ")));
                 Iterator<String> it = parts.iterator();
                 while (it.hasNext()) {
@@ -81,21 +81,21 @@ public class Main {
                         throw new CommandNotFoundException("Команда не была найдена");
                     }
                 } else if (parts.size() == 2) {
-                    if (console.getCommandList().containsKey(parts.get(0))){
+                    if (console.getCommandList().containsKey(parts.get(0))) {
                         console.executeCommand(parts.get(0), parts.get(1));
                     }
-                } else{
+                } else {
                     throw new IOException("Неверное количество аргументов.");
                 }
+            } catch (IOException | CommandNotFoundException | FileProblemException | WrongFormatException e) {
+                System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println("Неверный формат аргумента. " + e.getMessage());
+            } catch (ConditionsNotMetException e) {
+                System.out.println("Цена обязана быть больше 0.");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Значение обязано быть из списка: (KILOGRAMS, CENTIMETRES, SQUARE_METERS)");
             }
-        } catch (IOException | CommandNotFoundException | FileProblemException | WrongFormatException e) {
-            System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-        } catch (NumberFormatException e){
-            System.out.println("Неверный формат аргумента. " + e.getMessage());
-        } catch (ConditionsNotMetException e){
-            System.out.println("Цена обязана быть больше 0.");
-        } catch (IllegalArgumentException e){
-            System.out.println("Значение обязано быть из списка: (KILOGRAMS, CENTIMETRES, SQUARE_METERS)");
         }
     }
 }

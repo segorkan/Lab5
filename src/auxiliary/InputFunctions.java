@@ -4,19 +4,39 @@ import exceptions.ConditionsNotMetException;
 import objects.*;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.util.Date;
 import java.util.Scanner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-
+/**
+ * Класс хранит функции для ввода и валидации полей классов.
+ */
 public class InputFunctions {
 
-    public static String validateName(Scanner sc){
+    /**
+     * Ввод и валидация имени продукта.
+     * @param reader поток для чтения данных
+     * @return String
+     */
+    public static String validateName(InputStreamReader reader) throws IOException{
         while (true) {
             output("Введите имя name:");
-            String name = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String name = null;
+            int ch;
+            while ((ch = reader.read()) != -1){
+                if (ch == '\n'){
+                    name = sb.toString();
+                    break;
+                }
+                sb.append((char)ch);
+            }
+            if (ch == -1){
+                name = sb.toString();
+            }
             try {
                 if (name == null || name.isBlank()) {
                     throw new IOException("Имя не может быть пустым.");
@@ -31,6 +51,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация id продукта
+     * @param sc сканер
+     * @return int
+     */
     public static int validateId(Scanner sc){
         String stringId = sc.nextLine();
         try {
@@ -46,6 +71,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация имени даты создания файла.
+     * @param sc сканер
+     * @return {@link Date}
+     */
     public static Date validateDate(Scanner sc){
         String dateString = sc.nextLine();
         try {
@@ -62,6 +92,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация цены продукта.
+     * @param sc сканер
+     * @return Float
+     */
     public static Float validatePrice(Scanner sc) throws IOException, NumberFormatException {
         while (true) {
             output("Введите цену товара (вещественное число > 0):");
@@ -92,6 +127,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация номера детали.
+     * @param sc сканер
+     * @return String
+     */
     public static String validatePartNumber(Scanner sc) throws IOException {
         while (true) {
             output("Введите partNumber (длина не меньше 24):");
@@ -113,6 +153,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация координат продукта.
+     * @param sc сканер
+     * @return {@link Coordinates}
+     */
     public static Coordinates validateCoordinates(Scanner sc) {
         output("Начало ввода координаты." + "\n");
         Integer x = validateCoordinateX(sc);
@@ -120,6 +165,11 @@ public class InputFunctions {
         return new Coordinates(x, y);
     }
 
+    /**
+     * Ввод и валидация координаты X продукта.
+     * @param sc сканер
+     * @return Integer
+     */
     private static Integer validateCoordinateX(Scanner sc) {
         while (true) {
             output("Введите координату X (целое число > -352):");
@@ -151,6 +201,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация координаты Y продукта.
+     * @param sc сканер.
+     * @return float
+     */
     private static float validateCoordinateY(Scanner sc) {
         while (true) {
             output("Введите координату Y (вещественное число > -765):");
@@ -175,6 +230,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация единицы измерения.
+     * @param sc сканер
+     * @return {@link UnitOfMeasure}
+     */
     public static UnitOfMeasure validateUnitOfMeasure(Scanner sc) {
         while (true) {
             output("Введите единицу измерения (возможны KILOGRAMS, CENTIMETERS, SQUARE_METERS):");
@@ -198,6 +258,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация владельца продукта.
+     * @param sc сканер
+     * @return {@link Product}
+     */
     public static Person validatePerson(Scanner sc) {
         while (true) {
             output("Хотите ли вы ввести владельца продукта? (Y/N):");
@@ -226,6 +291,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация веса человека.
+     * @param sc сканер
+     * @return long
+     */
     private static long validateWeight(Scanner sc) {
         while (true) {
             output("Введите вес человека:");
@@ -257,6 +327,12 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация цвета.
+     * @param sc сканер
+     * @param addition уточнение поля ввода
+     * @return {@link Color}
+     */
     public static Color validateColor(Scanner sc, String addition) {
         while (true) {
             output("Введите цвет " + addition + " (возможны RED, BLACK, BLUE, WHITE, ORANGE, BROWN):");
@@ -275,6 +351,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация национальности человека.
+     * @param sc сканер
+     * @return {@link Country}
+     */
     public static Country validateNationality(Scanner sc) {
         while (true) {
             output("Введите национальность (возможны UNITED_KINGDOM, GERMANY, SPAIN, VATICAN, JAPAN):");
@@ -298,6 +379,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация местоположения владельца.
+     * @param sc сканер
+     * @return {@link Location}
+     */
     public static Location validateLocation(Scanner sc) {
         while (true) {
             output("Хотите ли вы ввести место нахождения человека? (Y/N):");
@@ -322,6 +408,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация координаты X местоположения
+     * @param sc сканер
+     * @return int
+     */
     public static int validateLocationX(Scanner sc) {
         while (true) {
             output("Введите координату X (целое число int):");
@@ -338,6 +429,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация координаты Y местоположения.
+     * @param sc сканер
+     * @return float
+     */
     public static float validateLocationY(Scanner sc) {
         while (true) {
             output("Введите координату Y (вещественное число float):");
@@ -354,6 +450,11 @@ public class InputFunctions {
         }
     }
 
+    /**
+     * Ввод и валидация названия местоположения владельца.
+     * @param sc сканер
+     * @return String
+     */
     public static String validateLocationName(Scanner sc) {
         while (true) {
             output("Введите название локации (длина не больше 563):");

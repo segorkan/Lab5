@@ -9,6 +9,9 @@ import interfaces.HistoryGetter;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Класс, отвечающий за хранение команд и истории команд.
+ */
 public class ConsoleHandler implements HistoryGetter {
 
     private static ConsoleHandler instance;
@@ -27,14 +30,25 @@ public class ConsoleHandler implements HistoryGetter {
         return ConsoleHandler.instance;
     }
 
+    /**
+     * Добавляет команду в таблицу команд.
+     * @param name название команды в консоли.
+     * @param command команда {@link Command}.
+     */
     public void addCommand(String name, Command command) {
         getInstance().commandList.put(name, command);
     }
 
+    /**
+     * Вернуть список с командами и их названиями в консоли.
+     */
     public Map<String, Command> getCommandList() {
         return getInstance().commandList;
     }
 
+    /**
+     * Вернуть историю команд.
+     */
     @Override
     public Deque<String> getHistory() {
         return getInstance().history;

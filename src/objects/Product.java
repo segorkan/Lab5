@@ -3,6 +3,9 @@ package objects;
 import java.util.Objects;
 import java.util.Date;
 
+/**
+ * Тип элементов в коллекции.
+ */
 public class Product implements Comparable<Product> {
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -12,7 +15,7 @@ public class Product implements Comparable<Product> {
     private String partNumber; //Длина строки должна быть не меньше 24, Поле не может быть null
     private UnitOfMeasure unitOfMeasure; //Поле не может быть null
     private Person owner; //Поле может быть null
-    private static int idCount = 1;
+    private static int idCount = 0;
     private static final float eps = 0.000000001f;
 
     public Product(String name, Coordinates coordinates, Float price, String partNumber,
@@ -44,6 +47,14 @@ public class Product implements Comparable<Product> {
 
     public static void incrementGlobalId(){
         idCount += 1;
+    }
+
+    public static int getGlobalId(){
+        return Product.idCount;
+    }
+
+    public static void setGlobalId(int id){
+        Product.idCount = id;
     }
 
     public int getId() {

@@ -10,10 +10,17 @@ public class CurrentInput {
         stream = System.in;
     }
 
+    /**
+     * Изменяет текущий входной поток.
+     * @param stream входной поток.
+     */
     public static void changeInputStream(InputStream stream) {
         CurrentInput.stream = stream;
     }
 
+    /**
+     * Возвращает текущий входной поток.
+     */
     public static InputStream getInputStream() {
         return CurrentInput.stream;
     }

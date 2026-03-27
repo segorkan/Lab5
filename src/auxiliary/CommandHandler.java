@@ -13,6 +13,9 @@ import java.util.*;
 
 import static auxiliary.InputFunctions.*;
 
+/**
+ * Класс, отвечающий за реализацию консольных команд.
+ */
 public class CommandHandler {
 
     private static CommandHandler instance;
@@ -20,6 +23,10 @@ public class CommandHandler {
     private CommandHandler() {
     }
 
+    /**
+     * Создаёт и возвращает сущность типа CommandHandler.
+     * @return Сущность типа CommandHandler
+     */
     public static CommandHandler getInstance() {
         if (CommandHandler.instance == null) {
             CommandHandler.instance = new CommandHandler();
@@ -27,10 +34,18 @@ public class CommandHandler {
         return CommandHandler.instance;
     }
 
-    public void add(Scanner sc) {
-        CollectionHandler.getInstance().addElement(makeElement(sc, true));
+    /**
+     * Реализация команды add.
+     * @param reader поток для чтения
+     */
+    public void add(InputStreamReader reader) {
+        CollectionHandler.getInstance().addElement(makeElement(reader, true));
     }
 
+    /**
+     * Реализация команды add_if_min.
+     * @param sc сканер
+     */
     public void addMin(Scanner sc) {
         Product newProduct = makeElement(sc, false);
         try {
@@ -45,6 +60,11 @@ public class CommandHandler {
         }
     }
 
+    /**
+     * Реализация команды update.
+     * @param sc сканер
+     * @param id id изменяемого элемента
+     */
     public void update(Scanner sc, int id) {
         try {
             Product oldProduct = CollectionHandler.getInstance().findById(id);
@@ -60,6 +80,10 @@ public class CommandHandler {
         }
     }
 
+    /**
+     * Реализация команды remove.
+     * @param id id удаляемого элемента
+     */
     public void remove(int id) {
         try {
             Product oldProduct = CollectionHandler.getInstance().findById(id);
@@ -69,6 +93,10 @@ public class CommandHandler {
         }
     }
 
+    /**
+     * Реализация команды remove_lower.
+     * @param sc сканер
+     */
     public void removeLower(Scanner sc) {
         Product compareProduct = makeElement(sc, false);
         Iterator<Product> it = CollectionHandler.getInstance().getCollection().iterator();
@@ -79,6 +107,9 @@ public class CommandHandler {
         }
     }
 
+    /**
+     * Реализация команды max_by_owner.
+     */
     public void maxByOwner() {
         try {
             if (CollectionHandler.getInstance().getCollection().isEmpty()) {
@@ -88,6 +119,7 @@ public class CommandHandler {
             for (Product element : CollectionHandler.getInstance().getCollection()) {
                 if (element.getOwner().equals(maxOwner)) {
                     System.out.println(element);
+                    break;
                 }
             }
         } catch (NoElementFoundException e) {
@@ -95,6 +127,10 @@ public class CommandHandler {
         }
     }
 
+    /**
+     * Реализация команды count_less_than_price.
+     * @param price цена, с которой сравниваются элементы.
+     */
     public void countLessThanPrice(float price) {
         int count = 0;
         for (Product element : CollectionHandler.getInstance().getCollection()) {
@@ -105,6 +141,10 @@ public class CommandHandler {
         System.out.println(count);
     }
 
+    /**
+     * Реализация команды filter.
+     * @param unitOfMeasure сравниваемая единица измерения.
+     */
     public void filter(UnitOfMeasure unitOfMeasure){
         for (Product element : CollectionHandler.getInstance().getCollection()){
             if (element.getUnitOfMeasure().ordinal() > unitOfMeasure.ordinal()){
@@ -113,10 +153,18 @@ public class CommandHandler {
         }
     }
 
+    /**
+     * Реализация команды clear.
+     */
     public void clear() {
         CollectionHandler.getInstance().getCollection().clear();
     }
 
+    /**
+     * Реализация команды history.
+     * @param history дек с историей команд.
+     * @param historyPrintSize количество выводимых команд. (по условию 13)
+     */
     public void history(Deque<String> history, int historyPrintSize) {
         int edge = Math.min(history.size(), historyPrintSize);
         System.out.printf("Начинаю вывод последних %d команд.%n", historyPrintSize);
@@ -132,7 +180,12 @@ public class CommandHandler {
         }
     }
 
-    public void execute(Path filePath) throws IOException, CommandNotFoundException {
+    /**
+     * Реализация команды execute.
+     * @param filePath путь до исполняемого файла.
+     * @throws IOException
+     */
+    public void execute(Path filePath) throws IOException {
         InputStream original = CurrentInput.getInputStream();
         try (InputStream reader = Files.newInputStream(filePath)){
             CurrentInput.changeInputStream(reader);
@@ -188,22 +241,35 @@ public class CommandHandler {
         CurrentInput.changeInputStream(original);
     }
 
+    /**
+     * Вызов реализации из обработчика CSV.
+     * @throws IOException
+     */
     public void save() throws IOException {
         CSVHandler.getInstance().write();
     }
 
+    /**
+     * Реализация команды exit.
+     */
     public void exit() {
         System.exit(0);
     }
 
-    public Product makeElement(Scanner sc, boolean isNew) {
+    /**
+     * Создание нового элемента коллекции.
+     * @param reader поток для чтения данных.
+     * @param isNew создание нового элемента или временного для консольных команд.
+     * @return Возвращает созданный {@link Product}.
+     */
+    public Product makeElement(InputStreamReader reader, boolean isNew) throws IOException{
         try {
-            String name = validateName(sc);
-            Coordinates coords = validateCoordinates(sc);
-            Float price = validatePrice(sc);
-            String partNumber = validatePartNumber(sc);
-            UnitOfMeasure unitofMeasure = validateUnitOfMeasure(sc);
-            Person owner = validatePerson(sc);
+            String name = validateName(reader);
+            Coordinates coords = validateCoordinates(reader);
+            Float price = validatePrice(reader);
+            String partNumber = validatePartNumber(reader);
+            UnitOfMeasure unitofMeasure = validateUnitOfMeasure(reader);
+            Person owner = validatePerson(reader);
             return new Product(name, coords, price, partNumber, unitofMeasure, owner, isNew);
         } catch (IOException | NumberFormatException | CommandNotFoundException e) {
             System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
@@ -212,11 +278,16 @@ public class CommandHandler {
         }
     }
 
-    public Product makeElementFromCSV(Scanner sc) {
+    /**
+     * Создание элемента из исходного файла.
+     * @param sc сканер.
+     * @return Возвращает созданный {@link Product}.
+     */
+    public Product makeElementFromCSV(InputStreamReader reader) throws IOException{
         try {
-            int id = validateId(sc);
-            String name = validateName(sc);
-            Coordinates coords = validateCoordinates(sc);
+            int id = validateId(reader);
+            String name = validateName(reader);
+            Coordinates coords = validateCoordinates(reader);
             Date date = validateDate(sc);
             Float price = validatePrice(sc);
             String partNumber = validatePartNumber(sc);
@@ -234,6 +305,9 @@ public class CommandHandler {
         }
     }
 
+    /**
+     * Реализация команды show.
+     */
     public void show() {
         for (Product elem : CollectionHandler.getInstance().getCollection()) {
             System.out.println(elem.toString());

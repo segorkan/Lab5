@@ -15,7 +15,6 @@ import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class CSVHandler {
 
@@ -31,24 +30,50 @@ public class CSVHandler {
         return CSVHandler.instance;
     }
 
-    public void read(Path csvPath) throws IOException, NoEnvironmentVariableException, FileProblemException, WrongFormatException {
+    /**
+     * Метод считывает {@link Product} из csv-файла.
+     * @param csvPath путь до csv-файла.
+     * @throws NoEnvironmentVariableException когда не существует файла с именем, указанном в переменной окружения.
+     * @throws FileProblemException           при невозможности чтения файла.
+     * @throws WrongFormatException           при неверном формате файла или данных внутри файла.
+     */
+    public void read(Path csvPath) throws NoEnvironmentVariableException, FileProblemException, WrongFormatException {
         if (Files.exists(csvPath)) {
             if (Files.isReadable(csvPath) && Files.isRegularFile(csvPath)) {
                 if (!csvPath.getFileName().toString().toLowerCase().endsWith(".csv")) {
                     throw new WrongFormatException();
                 }
-
-                try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader
-                        (Files.newInputStream(csvPath), StandardCharsets.UTF_8)).withCSVParser(
-                        new CSVParserBuilder().withSeparator(';').build()).build()) {
-
-                    String[] nextLine;
+                try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(csvPath), StandardCharsets.UTF_8)) {
+                    StringBuilder newLine = new StringBuilder();
+                    int ch;
                     int count = 1;
-                    while ((nextLine = reader.readNext()) != null) {
+                    boolean firstline = true;
+                    while ((ch = reader.read()) != -1) {
+                        if (ch == '\n') {
+                            String lineStr = newLine.toString();
+                            if (firstline){
+                                firstline = false;
+                                newLine.setLength(0);
+                                continue;
+                            }
+                            if (!lineStr.isEmpty()) {
+                                System.out.printf("Начинаю ввод продукта %d.%n", count);
+                                String[] fields = lineStr.split(";");
+                                parseProduct(fields);
+                                System.out.printf("Ввод строки %d завершён.%n", count);
+                                count++;
+                            }
+                            newLine.setLength(0);
+                        } else {
+                            newLine.append((char) ch);
+                        }
+                    }
+                    if (!newLine.isEmpty()) {
+                        String lineStr = newLine.toString();
                         System.out.printf("Начинаю ввод продукта %d.%n", count);
-                        parseProduct(nextLine);
-                        count += 1;
-                        System.out.printf("Ввод строки %d завершён.%n", count - 1);
+                        String[] fields = lineStr.split(";");
+                        parseProduct(fields);
+                        System.out.printf("Ввод строки %d завершён.%n", count);
                     }
                 } catch (Exception e) {
                     throw new WrongFormatException("Проблема с данными в исходном файле. Последний продукт некорректен.");
@@ -61,22 +86,26 @@ public class CSVHandler {
         }
     }
 
+    /**
+     * Метод парсит 1 продукт из csv-файла.
+     * @param line список полей одного продукта.
+     * @throws IOException при проблемах с исходными данными.
+     */
     public void parseProduct(String[] line) throws IOException {
         Path newObject = Paths.get("resources/new_object.txt");
-        try (OutputStreamWriter writer = new OutputStreamWriter(new BufferedOutputStream(Files.newOutputStream(
-                newObject, StandardOpenOption.TRUNCATE_EXISTING)))) {
+        try (BufferedOutputStream writer = new BufferedOutputStream(Files.newOutputStream(
+                newObject, StandardOpenOption.TRUNCATE_EXISTING))) {
             for (String obj : line) {
-                writer.write(obj + "\n");
+                writer.write((obj + "\n").getBytes(StandardCharsets.UTF_8));
                 writer.flush();
             }
-
             InputStream original = CurrentInput.getInputStream();
             CurrentInput.changeInputStream(Files.newInputStream(newObject));
             CommandHandler commandHandler = CommandHandler.getInstance();
             Scanner sc = new Scanner(CurrentInput.getInputStream());
             Product product = commandHandler.makeElementFromCSV(sc);
+            Product.setGlobalId(Math.max(Product.getGlobalId(), product.getId()));
             CurrentInput.changeInputStream(original);
-
             if (sc.hasNextLine()) {
                 sc.close();
                 throw new IOException("Проблема с данными в исходном файле. Последний продукт некорректен.");
@@ -86,73 +115,75 @@ public class CSVHandler {
         }
     }
 
-    public void write() throws IOException, FileProblemException, WrongFormatException {
+    /**
+     * Метод записывает элементы коллекции в csv-файл.
+     * @throws FileProblemException           при проблемах с записью в файл.
+     * @throws WrongFormatException           при неправильном формате файла.
+     * @throws NoEnvironmentVariableException при изменении переменной окружения во время выполнения.
+     */
+    public void write() throws NoEnvironmentVariableException, FileProblemException, WrongFormatException, IOException {
         Path csvPath = Paths.get(System.getenv("FILE_NAME"));
-        if (Files.exists(csvPath)){
-            if (Files.isWritable(csvPath) && Files.isRegularFile(csvPath)){
+        if (Files.exists(csvPath)) {
+            if (Files.isWritable(csvPath) && Files.isRegularFile(csvPath)) {
                 if (!csvPath.getFileName().toString().toLowerCase().endsWith(".csv")) {
                     throw new WrongFormatException();
                 }
 
-                try (CSVWriter writer = (CSVWriter) new CSVWriterBuilder(new OutputStreamWriter(new BufferedOutputStream(
-                        Files.newOutputStream(csvPath, StandardOpenOption.TRUNCATE_EXISTING)),
-                        StandardCharsets.UTF_8)).withSeparator(';').build())  {
+                try (BufferedOutputStream writer = new BufferedOutputStream(
+                        Files.newOutputStream(csvPath, StandardOpenOption.TRUNCATE_EXISTING))) {
 
                     for (Product product : CollectionHandler.getInstance().getCollection()) {
 
-                        ArrayList<String> productMembers = new ArrayList<String>();
-
-                        productMembers.add(Integer.toString(product.getId()));
-                        productMembers.add(product.getName());
-                        productMembers.add(Integer.toString(product.getCoordinates().getX()));
-                        productMembers.add(Float.toString(product.getCoordinates().getY()));
+                        StringBuilder productMembers = new StringBuilder();
+                        productMembers.append(Integer.toString(product.getId())).append(";");
+                        productMembers.append(product.getName()).append(";");
+                        productMembers.append(Integer.toString(product.getCoordinates().getX())).append(";");
+                        productMembers.append(Float.toString(product.getCoordinates().getY())).append(";");
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         String formattedDate = dateFormat.format(product.getDate());
-                        productMembers.add(formattedDate);
+                        productMembers.append(formattedDate).append(";");
                         try {
-                            productMembers.add(Float.toString(product.getPrice()));
+                            productMembers.append(Float.toString(product.getPrice())).append(";");
                         } catch (NullPointerException e) {
-                            productMembers.add("");
+                            productMembers.append(";");
                         }
-                        productMembers.add(product.getPartNumber());
-                        productMembers.add(product.getUnitOfMeasure().toString());
+                        productMembers.append(product.getPartNumber()).append(";");
+                        productMembers.append(product.getUnitOfMeasure().toString()).append(";");
                         if (product.getOwner() != null) {
-                            productMembers.add("Y");
-                            productMembers.add(product.getOwner().getName());
-                            productMembers.add(Long.toString(product.getOwner().getWeight()));
+                            productMembers.append("Y").append(";");
+                            productMembers.append(product.getOwner().getName()).append(";");
+                            productMembers.append(Long.toString(product.getOwner().getWeight())).append(";");
                             try {
-                                productMembers.add(product.getOwner().getEyeColor().toString());
+                                productMembers.append(product.getOwner().getEyeColor().toString()).append(";");
                             } catch (NullPointerException e) {
-                                productMembers.add("");
+                                productMembers.append(";");
                             }
                             try {
-                                productMembers.add(product.getOwner().getHairColor().toString());
+                                productMembers.append(product.getOwner().getHairColor().toString()).append(";");
                             } catch (NullPointerException e) {
-                                productMembers.add("");
+                                productMembers.append(";");
                             }
-                            productMembers.add(product.getOwner().getNationality().toString());
+                            productMembers.append(product.getOwner().getNationality().toString()).append(";");
                             if (product.getOwner().getLocation() != null) {
-                                productMembers.add("Y");
-                                productMembers.add(Integer.toString(product.getOwner().getLocation().getX()));
-                                productMembers.add(Float.toString(product.getOwner().getLocation().getY()));
-                                productMembers.add(product.getOwner().getLocation().getName());
+                                productMembers.append("Y").append(";");
+                                productMembers.append(Integer.toString(product.getOwner().getLocation().getX())).append(";");
+                                productMembers.append(Float.toString(product.getOwner().getLocation().getY())).append(";");
+                                productMembers.append(product.getOwner().getLocation().getName()).append(";");
                             } else {
-                                productMembers.add("N");
+                                productMembers.append("N");
                             }
                         } else {
-                            productMembers.add("N");
+                            productMembers.append("N");
                         }
-
-                        String[] csvData = productMembers.toArray(new String[0]);
-                        writer.writeNext(csvData);
+                        writer.write(productMembers.toString().getBytes(StandardCharsets.UTF_8));
                     }
                 }
 
-            } else{
+            } else {
                 throw new FileProblemException("В файл нельзя записать данные.");
             }
-        } else{
-            throw new IOException("Файла с именем в переменной окружения не существует.");
+        } else {
+            throw new NoEnvironmentVariableException("Файла с именем в переменной окружения не существует.");
         }
     }
 }

@@ -3,6 +3,7 @@ package commands;
 import interfaces.ElementCreator;
 import objects.*;
 
+import java.io.InputStreamReader;
 import java.util.Scanner;
 import static auxiliary.InputFunctions.*;
 
@@ -16,8 +17,8 @@ public class Add extends Command implements ElementCreator {
 
     @Override
     public void execute() {
-        Scanner sc = new Scanner(getStreamInput());
-        getCommandHandler().add(sc);
+        InputStreamReader reader = new InputStreamReader(getStreamInput());
+        getCommandHandler().add(reader);
     }
 
 }

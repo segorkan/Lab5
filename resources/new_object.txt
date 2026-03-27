@@ -1,18 +1,15 @@
-1
+2
 sergei
--350
-78.321
-02/02/2020 13:33
-65
-hfhfhfhfhfhfhhfhfhfhfhfhfhfhfhfhfhfhfhfhfh
+-349
+-50.3
+26/03/2026 19:53
+60.55
+jghdasjsjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdj
 KILOGRAMS
 Y
-Vasya
-34
-RED
-RED
+Kitten
+90
+BLACK
+WHITE
 GERMANY
-Y
-45
--34.3
-DESErt
+N
