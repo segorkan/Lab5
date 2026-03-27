@@ -18,5 +18,6 @@ public class Filter extends Command {
     public void execute(String argument) throws IllegalArgumentException {
         UnitOfMeasure unitOfMeasure = UnitOfMeasure.valueOf(argument.trim());
         getCommandHandler().filter(unitOfMeasure);
+        getConsoleHandler().addToHistory("filter_greater_than_unit_of_measure");
     }
 }

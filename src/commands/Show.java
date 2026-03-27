@@ -14,5 +14,6 @@ public class Show extends Command {
     @Override
     public void execute() {
         getCommandHandler().show();
+        getConsoleHandler().addToHistory("show");
     }
 }

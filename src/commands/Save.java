@@ -16,5 +16,6 @@ public class Save extends Command {
     @Override
     public void execute() throws IOException {
         getCommandHandler().save();
+        getConsoleHandler().addToHistory("save");
     }
 }

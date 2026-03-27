@@ -22,5 +22,6 @@ public class Count extends Command {
             throw new ConditionsNotMetException();
         }
         getCommandHandler().countLessThanPrice(price);
+        getConsoleHandler().addToHistory("count_less_than_price");
     }
 }

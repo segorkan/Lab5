@@ -12,5 +12,6 @@ public class Exit extends Command {
     @Override
     public void execute() {
         getCommandHandler().exit();
+        getConsoleHandler().addToHistory("exit");
     }
 }

@@ -9,5 +9,6 @@ public class Info extends Command{
     @Override
     public void execute() {
         getCommandHandler().info();
+        getConsoleHandler().addToHistory("info");
     }
 }

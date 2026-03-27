@@ -1,15 +1,9 @@
-2
-sergei
--349
--50.3
-26/03/2026 19:53
-60.55
-jghdasjsjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdj
+4
+apple
+-350
+-760.0
+27/03/2026 23:04
+0.2
+djdjsajdklsajkldjaskljdklasj
 KILOGRAMS
-Y
-Kitten
-90
-BLACK
-WHITE
-GERMANY
 N

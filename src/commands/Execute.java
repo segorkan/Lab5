@@ -34,7 +34,10 @@ public class Execute extends Command {
                 if (!filePath.getFileName().toString().toLowerCase().endsWith(".txt")) {
                     throw new WrongFormatException();
                 }
+                System.out.println("Начинаю выполнение " + filePath);
                 getCommandHandler().execute(filePath);
+                getConsoleHandler().addToHistory("execute");
+                System.out.println("Выполнение скрипта закончено.");
             } else {
                 throw new FileProblemException("Передан неверный файл: файл нельзя прочитать.");
             }

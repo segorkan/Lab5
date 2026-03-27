@@ -13,5 +13,6 @@ public class Clear extends Command {
     @Override
     public void execute(){
         getCommandHandler().clear();
+        getConsoleHandler().addToHistory("clear");
     }
 }

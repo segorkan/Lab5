@@ -18,5 +18,6 @@ public class History extends Command{
     @Override
     public void execute() {
         getCommandHandler().history(historyGetter.getHistory(), historyPrintSize);
+        getConsoleHandler().addToHistory("history");
     }
 }

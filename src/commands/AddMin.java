@@ -19,7 +19,8 @@ public class AddMin extends Command implements ElementCreator{
      */
     @Override
     public void execute() throws IOException {
-        InputStreamReader reader = new InputStreamReader(getStreamInput());
+        InputStreamReader reader = getStreamInput();
         getCommandHandler().addMin(reader);
+        getConsoleHandler().addToHistory("add_if_min");
     }
 }

@@ -19,5 +19,6 @@ public class Remove extends Command implements ElementCreator {
     public void execute(String argument) throws NumberFormatException{
         int id = Integer.parseInt(argument.trim());
         getCommandHandler().remove(id);
+        getConsoleHandler().addToHistory("remove_by_id");
     }
 }

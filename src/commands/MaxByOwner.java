@@ -12,5 +12,6 @@ public class MaxByOwner extends Command{
     @Override
     public void execute() {
         getCommandHandler().maxByOwner();
+        getConsoleHandler().addToHistory("max_by_owner");
     }
 }

@@ -73,7 +73,7 @@ public class CSVHandler {
                         System.out.printf("Начинаю ввод продукта %d.%n", count);
                         String[] fields = lineStr.split(";");
                         parseProduct(fields);
-                        System.out.printf("Ввод строки %d завершён.%n", count);
+                        System.out.printf("Ввод продукта %d завершён.%n", count);
                     }
                     Product.incrementGlobalId();
                 } catch (Exception e) {

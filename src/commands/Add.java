@@ -23,8 +23,9 @@ public class Add extends Command implements ElementCreator {
      */
     @Override
     public void execute() throws IOException {
-        InputStreamReader reader = new InputStreamReader(getStreamInput());
+        InputStreamReader reader = getStreamInput();
         getCommandHandler().add(reader);
+        getConsoleHandler().addToHistory("add");
     }
 
 }

@@ -141,16 +141,16 @@ public class Product implements Comparable<Product> {
     @Override
     public int compareTo(Product other){
         if (getPrice() == null && other.getPrice() == null){
-            return Integer.compare(getId(), other.getId());
+            return getName().compareTo(other.getName());
         }
-        if (getPrice() == null && other.getPrice() != null){
+        if (getPrice() == null){
             return -1;
         }
-        if (getPrice() != null && other.getPrice() == null){
+        if (other.getPrice() == null){
             return 1;
         }
         if (compareFloat(other.getPrice())){
-            return Integer.compare(getId(), other.getId());
+            return getName().compareTo(other.getName());
         }
         return Float.compare(getPrice(), other.getPrice());
     }
@@ -165,13 +165,13 @@ public class Product implements Comparable<Product> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return id == product.id && Objects.equals(name, product.name)
-                && Objects.equals(creationDate, product.creationDate);
+        return Objects.equals(name, product.name)
+                && Objects.equals(partNumber, product.partNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, creationDate);
+        return Objects.hash(name, partNumber);
     }
 
     @Override

@@ -138,9 +138,6 @@ public class InputFunctions {
                 pricestring = sb.toString();
             }
             if (pricestring == null || pricestring.isBlank()) {
-                if (CurrentInput.getInputStream() != System.in) {
-                    System.exit(1);
-                }
                 return null;
             }
             try {
@@ -370,7 +367,7 @@ public class InputFunctions {
                 if (ch == -1) {
                     answer = sb.toString();
                 }
-                if (answer.equals("Y")) {
+                if (answer.trim().equals("Y")) {
                     output("Начинаю ввод владельца.");
                     String name = validateName(reader);
                     long weight = validateWeight(reader);
@@ -379,7 +376,7 @@ public class InputFunctions {
                     Country nationality = validateNationality(reader);
                     Location location = validateLocation(reader);
                     return new Person(name, weight, eyeColor, hairColor, nationality, location);
-                } else if (answer.equals("N")) {
+                } else if (answer.trim().equals("N")) {
                     return null;
                 } else {
                     throw new IOException("Ответ должен быть Y или N.");
@@ -543,12 +540,12 @@ public class InputFunctions {
                 if (ch == -1) {
                     answer = sb.toString();
                 }
-                if (answer.equals("Y")) {
+                if (answer.trim().equals("Y")) {
                     int x = validateLocationX(reader);
                     float y = validateLocationY(reader);
                     String name = validateLocationName(reader);
                     return new Location(x, y, name);
-                } else if (answer.equals("N")) {
+                } else if (answer.trim().equals("N")) {
                     return null;
                 } else {
                     throw new IOException("Ответ должен быть Y или N.");

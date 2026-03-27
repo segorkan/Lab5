@@ -188,7 +188,7 @@ public class CommandHandler {
         InputStream original = CurrentInput.getInputStream();
         try (InputStream inputStream = Files.newInputStream(filePath)){
             CurrentInput.changeInputStream(inputStream);
-            InputStreamReader reader = new InputStreamReader(inputStream);
+            InputStreamReader reader = CurrentInput.getInputStreamReader();
             ConsoleHandler console = ConsoleHandler.getInstance();
             try {
                 int ch = 0;
@@ -207,6 +207,9 @@ public class CommandHandler {
                             break;
                         }
                         command = sb.toString();
+                    }
+                    if (command.isBlank()){
+                        continue;
                     }
                     ArrayList<String> parts = new ArrayList<>(Arrays.asList(command.trim().split(" ")));
                     Iterator<String> it = parts.iterator();
@@ -331,6 +334,6 @@ public class CommandHandler {
      * Реализация команды info.
      */
     public void info(){
-        CollectionHandler.getInstance().printInfo();
+        System.out.println(CollectionHandler.getInstance().printInfo());
     }
 }

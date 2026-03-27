@@ -29,5 +29,6 @@ public class Help extends Command {
     @Override
     public void execute() {
         System.out.println(Help.message);
+        getConsoleHandler().addToHistory("help");
     }
 }

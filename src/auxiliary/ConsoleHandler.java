@@ -54,13 +54,15 @@ public class ConsoleHandler implements HistoryGetter {
         return getInstance().history;
     }
 
+    public void addToHistory(String command){
+        getHistory().add(command);
+    }
+
     public void executeCommand(String command) throws NumberFormatException, ConditionsNotMetException, IllegalArgumentException, IOException {
         getInstance().getCommandList().get(command).execute();
-        getInstance().getHistory().add(command);
     }
 
     public void executeCommand(String command, String argument) throws NumberFormatException, ConditionsNotMetException, IllegalArgumentException, IOException, FileProblemException, WrongFormatException {
         getInstance().getCommandList().get(command).execute(argument);
-        getInstance().getHistory().add(command);
     }
 }

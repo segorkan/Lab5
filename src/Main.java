@@ -76,6 +76,9 @@ public class Main {
                 if (ch == -1) {
                     command = sb.toString();
                 }
+                if (command.isBlank()){
+                    continue;
+                }
                 ArrayList<String> parts = new ArrayList<>(Arrays.asList(command.trim().split(" ")));
                 Iterator<String> it = parts.iterator();
                 while (it.hasNext()) {

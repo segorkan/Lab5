@@ -22,7 +22,8 @@ public class Update extends Command implements ElementCreator {
     @Override
     public void execute(String argument) throws NumberFormatException, IOException {
         int id = Integer.parseInt(argument.trim());
-        InputStreamReader reader = new InputStreamReader(getStreamInput());
+        InputStreamReader reader = getStreamInput();
         getCommandHandler().update(reader, id);
+        getConsoleHandler().addToHistory("update");
     }
 }

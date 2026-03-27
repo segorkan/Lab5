@@ -19,7 +19,8 @@ public class RemoveLower extends Command implements ElementCreator {
      */
     @Override
     public void execute() throws IOException {
-        InputStreamReader reader = new InputStreamReader(getStreamInput());
+        InputStreamReader reader = getStreamInput();
         getCommandHandler().removeLower(reader);
+        getConsoleHandler().addToHistory("remove_lower");
     }
 }

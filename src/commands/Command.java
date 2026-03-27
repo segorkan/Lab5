@@ -1,10 +1,9 @@
 package commands;
 
-import auxiliary.CollectionHandler;
 import auxiliary.CommandHandler;
+import auxiliary.ConsoleHandler;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Базовый класс для всех команд.
@@ -12,20 +11,28 @@ import java.util.ArrayList;
 public abstract class Command {
 
     private final CommandHandler commandHandler;
+    private final ConsoleHandler consoleHandler;
 
     /**
-     * Конструктор команды. Выполняется всеми командами и сохраняет ссылку на {@link CommandHandler}.
+     * Конструктор команды. Выполняется всеми командами и сохраняет ссылку на {@link CommandHandler} и {@link ConsoleHandler}.
      */
     Command() {
         this.commandHandler = CommandHandler.getInstance();
+        this.consoleHandler = ConsoleHandler.getInstance();
     }
 
     /**
-     * Вернуть {@link CommandHandler}
-     * @return
+     * Вернуть {@link CommandHandler}.
      */
     CommandHandler getCommandHandler(){
         return this.commandHandler;
+    }
+
+    /**
+     * Вернуть {@link ConsoleHandler}.
+     */
+    ConsoleHandler getConsoleHandler(){
+        return this.consoleHandler;
     }
 
     /**
@@ -33,7 +40,7 @@ public abstract class Command {
      * @throws IOException
      */
     public void execute() throws IOException {
-        System.out.println("Стандартная реализация execute");
+        System.out.println("Добавьте аргумент.");
     }
 
     /**

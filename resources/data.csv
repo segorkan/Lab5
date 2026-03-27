@@ -1,3 +1,2 @@
-1;sergei;-350;78.321;02/02/2020 13:33;65.0;hfhfhfhfhfhfhhfhfhfhfhfhfhfhfhfhfhfhfhfhfh;KILOGRAMS;Y;Vasya;34;RED;RED;GERMANY;Y;45;-34.3;DESErt
-2;sergei;-349;-50.3;26/03/2026 19:53;60.55;jghdasjsjdjdjdjdjdjdjdjdjdjdjdjdjdjdjdj;KILOGRAMS;Y;Kitten;90;BLACK;WHITE;GERMANY;N
-3;banana;432;4.0;27/03/2026 13:20;0.4;HGHGHGHGHGHGHGHGHHGHGHGHGHGHGHHGHGHG;KILOGRAMS;Y;SDEK;80;;;GERMANY;Y;5;5.54;north pole
+ID;Имя продукта;Координата X;Координата Y;Дата создания;Цена;Номер продукта;Единица измерения;Владелец(Y/N);Имя владельца;Вес владельца;Цвет глаз;Цвет волос;Национальность;Местоположение(Y/N);Координата X;Координата Y;Название локации
+
