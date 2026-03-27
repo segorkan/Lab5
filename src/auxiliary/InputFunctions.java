@@ -1,13 +1,10 @@
 package auxiliary;
 
-import exceptions.ConditionsNotMetException;
 import objects.*;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.util.Date;
-import java.util.Scanner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -18,23 +15,24 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация имени продукта.
+     *
      * @param reader поток для чтения данных
      * @return String
      */
-    public static String validateName(InputStreamReader reader) throws IOException{
+    public static String validateName(InputStreamReader reader) throws IOException {
         while (true) {
             output("Введите имя name:");
             StringBuilder sb = new StringBuilder();
             String name = null;
             int ch;
-            while ((ch = reader.read()) != -1){
-                if (ch == '\n'){
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
                     name = sb.toString();
                     break;
                 }
-                sb.append((char)ch);
+                sb.append((char) ch);
             }
-            if (ch == -1){
+            if (ch == -1) {
                 name = sb.toString();
             }
             try {
@@ -44,7 +42,7 @@ public class InputFunctions {
                 return name.trim();
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -53,18 +51,30 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация id продукта
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return int
      */
-    public static int validateId(Scanner sc){
-        String stringId = sc.nextLine();
+    public static int validateId(InputStreamReader reader) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        String stringId = null;
+        int ch;
+        while ((ch = reader.read()) != -1) {
+            if (ch == '\n') {
+                stringId = sb.toString();
+                break;
+            }
+            sb.append((char) ch);
+        }
+        if (ch == -1) {
+            stringId = sb.toString();
+        }
         try {
-            if (stringId == null){
+            if (stringId == null) {
                 throw new NullPointerException();
             }
-            int id = Integer.parseInt(stringId.trim());
-            return id;
-        } catch (NumberFormatException | NullPointerException e){
+            return Integer.parseInt(stringId.trim());
+        } catch (NumberFormatException | NullPointerException e) {
             System.out.println("Проблема с данными в исходном файле. Последний продукт некорректен.");
             System.exit(1);
             return 0;
@@ -73,19 +83,32 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация имени даты создания файла.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return {@link Date}
      */
-    public static Date validateDate(Scanner sc){
-        String dateString = sc.nextLine();
+    public static Date validateDate(InputStreamReader reader) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        String dateString = null;
+        int ch;
+        while ((ch = reader.read()) != -1) {
+            if (ch == '\n') {
+                dateString = sb.toString();
+                break;
+            }
+            sb.append((char) ch);
+        }
+        if (ch == -1) {
+            dateString = sb.toString();
+        }
         try {
-            if (dateString == null){
+            if (dateString == null) {
                 throw new NullPointerException();
             }
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             Date date = dateFormat.parse(dateString);
             return date;
-        } catch (ParseException | NullPointerException e){
+        } catch (ParseException | NullPointerException e) {
             System.out.println("Проблема с данными в исходном файле. Последний продукт некорректен.");
             System.exit(1);
             return new Date();
@@ -94,15 +117,28 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация цены продукта.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return Float
      */
-    public static Float validatePrice(Scanner sc) throws IOException, NumberFormatException {
+    public static Float validatePrice(InputStreamReader reader) throws IOException, NumberFormatException {
         while (true) {
             output("Введите цену товара (вещественное число > 0):");
-            String pricestring = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String pricestring = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    pricestring = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                pricestring = sb.toString();
+            }
             if (pricestring == null || pricestring.isBlank()) {
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
                 return null;
@@ -115,12 +151,12 @@ public class InputFunctions {
                 return price;
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "price обязана иметь тип float.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -129,13 +165,26 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация номера детали.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return String
      */
-    public static String validatePartNumber(Scanner sc) throws IOException {
+    public static String validatePartNumber(InputStreamReader reader) throws IOException {
         while (true) {
             output("Введите partNumber (длина не меньше 24):");
-            String partNumber = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String partNumber = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    partNumber = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                partNumber = sb.toString();
+            }
             try {
                 if (partNumber == null || partNumber.isBlank()) {
                     throw new IOException("partNumber не может быть пустым.");
@@ -146,7 +195,7 @@ public class InputFunctions {
                 return partNumber.trim();
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -155,28 +204,42 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация координат продукта.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return {@link Coordinates}
      */
-    public static Coordinates validateCoordinates(Scanner sc) {
+    public static Coordinates validateCoordinates(InputStreamReader reader) throws IOException{
         output("Начало ввода координаты." + "\n");
-        Integer x = validateCoordinateX(sc);
-        float y = validateCoordinateY(sc);
+        Integer x = validateCoordinateX(reader);
+        float y = validateCoordinateY(reader);
         return new Coordinates(x, y);
     }
 
     /**
      * Ввод и валидация координаты X продукта.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return Integer
      */
-    private static Integer validateCoordinateX(Scanner sc) {
+    private static Integer validateCoordinateX(InputStreamReader reader) throws IOException {
         while (true) {
             output("Введите координату X (целое число > -352):");
-            String xstring = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String xstring = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    xstring = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                xstring = sb.toString();
+            }
             if (xstring == null || xstring.isBlank()) {
                 System.out.println("Координата X не может быть пустой.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
                 continue;
@@ -189,12 +252,12 @@ public class InputFunctions {
                 return x;
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "X обязана иметь тип int.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -203,13 +266,26 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация координаты Y продукта.
-     * @param sc сканер.
+     *
+     * @param reader входной поток
      * @return float
      */
-    private static float validateCoordinateY(Scanner sc) {
+    private static float validateCoordinateY(InputStreamReader reader) throws IOException {
         while (true) {
             output("Введите координату Y (вещественное число > -765):");
-            String ystring = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String ystring = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    ystring = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                ystring = sb.toString();
+            }
             try {
                 float y = Float.parseFloat(ystring.trim());
                 if (y <= -765) {
@@ -218,12 +294,12 @@ public class InputFunctions {
                 return y;
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "Y обязан иметь тип float.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -232,13 +308,26 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация единицы измерения.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return {@link UnitOfMeasure}
      */
-    public static UnitOfMeasure validateUnitOfMeasure(Scanner sc) {
+    public static UnitOfMeasure validateUnitOfMeasure(InputStreamReader reader) throws IOException {
         while (true) {
             output("Введите единицу измерения (возможны KILOGRAMS, CENTIMETERS, SQUARE_METERS):");
-            String unit = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String unit = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    unit = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                unit = sb.toString();
+            }
             try {
                 if (unit == null || unit.isBlank()) {
                     throw new IOException("Единица измерения не может быть пустой.");
@@ -246,12 +335,12 @@ public class InputFunctions {
                 return UnitOfMeasure.valueOf(unit.trim());
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "Значение обязано быть из списка.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -260,22 +349,35 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация владельца продукта.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return {@link Product}
      */
-    public static Person validatePerson(Scanner sc) {
+    public static Person validatePerson(InputStreamReader reader) {
         while (true) {
             output("Хотите ли вы ввести владельца продукта? (Y/N):");
             try {
-                String answer = sc.nextLine().trim();
+                StringBuilder sb = new StringBuilder();
+                String answer = null;
+                int ch;
+                while ((ch = reader.read()) != -1) {
+                    if (ch == '\n') {
+                        answer = sb.toString();
+                        break;
+                    }
+                    sb.append((char) ch);
+                }
+                if (ch == -1) {
+                    answer = sb.toString();
+                }
                 if (answer.equals("Y")) {
                     output("Начинаю ввод владельца.");
-                    String name = validateName(sc);
-                    long weight = validateWeight(sc);
-                    Color eyeColor = validateColor(sc, "глаза");
-                    Color hairColor = validateColor(sc, "волос");
-                    Country nationality = validateNationality(sc);
-                    Location location = validateLocation(sc);
+                    String name = validateName(reader);
+                    long weight = validateWeight(reader);
+                    Color eyeColor = validateColor(reader, "глаза");
+                    Color hairColor = validateColor(reader, "волос");
+                    Country nationality = validateNationality(reader);
+                    Location location = validateLocation(reader);
                     return new Person(name, weight, eyeColor, hairColor, nationality, location);
                 } else if (answer.equals("N")) {
                     return null;
@@ -284,7 +386,7 @@ public class InputFunctions {
                 }
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -293,16 +395,29 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация веса человека.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return long
      */
-    private static long validateWeight(Scanner sc) {
+    private static long validateWeight(InputStreamReader reader) throws IOException {
         while (true) {
             output("Введите вес человека:");
-            String weightstring = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String weightstring = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    weightstring = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                weightstring = sb.toString();
+            }
             if (weightstring == null || weightstring.trim().isEmpty()) {
                 System.out.println("Вес человека не может быть null.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
                 continue;
@@ -315,12 +430,12 @@ public class InputFunctions {
                 return weight;
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "Вес обязан иметь тип long.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -329,14 +444,27 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация цвета.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @param addition уточнение поля ввода
      * @return {@link Color}
      */
-    public static Color validateColor(Scanner sc, String addition) {
+    public static Color validateColor(InputStreamReader reader, String addition) throws IOException {
         while (true) {
             output("Введите цвет " + addition + " (возможны RED, BLACK, BLUE, WHITE, ORANGE, BROWN):");
-            String color = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String color = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    color = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                color = sb.toString();
+            }
             try {
                 if (color == null || color.isBlank()) {
                     return null;
@@ -344,7 +472,7 @@ public class InputFunctions {
                 return Color.valueOf(color.trim());
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "Значение обязано быть из списка.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -353,13 +481,26 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация национальности человека.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return {@link Country}
      */
-    public static Country validateNationality(Scanner sc) {
+    public static Country validateNationality(InputStreamReader reader) throws IOException {
         while (true) {
             output("Введите национальность (возможны UNITED_KINGDOM, GERMANY, SPAIN, VATICAN, JAPAN):");
-            String country = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String country = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    country = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                country = sb.toString();
+            }
             try {
                 if (country == null || country.isBlank()) {
                     throw new IOException("Национальность не может быть пустой.");
@@ -367,12 +508,12 @@ public class InputFunctions {
                 return Country.valueOf(country.trim());
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "Значение обязано быть из списка.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -381,18 +522,31 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация местоположения владельца.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return {@link Location}
      */
-    public static Location validateLocation(Scanner sc) {
+    public static Location validateLocation(InputStreamReader reader) {
         while (true) {
             output("Хотите ли вы ввести место нахождения человека? (Y/N):");
             try {
-                String answer = sc.nextLine().trim();
+                StringBuilder sb = new StringBuilder();
+                String answer = null;
+                int ch;
+                while ((ch = reader.read()) != -1) {
+                    if (ch == '\n') {
+                        answer = sb.toString();
+                        break;
+                    }
+                    sb.append((char) ch);
+                }
+                if (ch == -1) {
+                    answer = sb.toString();
+                }
                 if (answer.equals("Y")) {
-                    int x = validateLocationX(sc);
-                    float y = validateLocationY(sc);
-                    String name = validateLocationName(sc);
+                    int x = validateLocationX(reader);
+                    float y = validateLocationY(reader);
+                    String name = validateLocationName(reader);
                     return new Location(x, y, name);
                 } else if (answer.equals("N")) {
                     return null;
@@ -401,7 +555,7 @@ public class InputFunctions {
                 }
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -410,19 +564,32 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация координаты X местоположения
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return int
      */
-    public static int validateLocationX(Scanner sc) {
+    public static int validateLocationX(InputStreamReader reader) throws IOException{
         while (true) {
             output("Введите координату X (целое число int):");
-            String xstring = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String xstring = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    xstring = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                xstring = sb.toString();
+            }
             try {
                 int x = Integer.parseInt(xstring.trim());
                 return x;
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "X обязан иметь тип int.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -431,19 +598,32 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация координаты Y местоположения.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return float
      */
-    public static float validateLocationY(Scanner sc) {
+    public static float validateLocationY(InputStreamReader reader) throws IOException {
         while (true) {
             output("Введите координату Y (вещественное число float):");
-            String ystring = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String ystring = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    ystring = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                ystring = sb.toString();
+            }
             try {
                 float y = Float.parseFloat(ystring.trim());
                 return y;
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "Y обязан иметь тип float.");
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
@@ -452,13 +632,26 @@ public class InputFunctions {
 
     /**
      * Ввод и валидация названия местоположения владельца.
-     * @param sc сканер
+     *
+     * @param reader входной поток
      * @return String
      */
-    public static String validateLocationName(Scanner sc) {
+    public static String validateLocationName(InputStreamReader reader) throws IOException{
         while (true) {
             output("Введите название локации (длина не больше 563):");
-            String location = sc.nextLine();
+            StringBuilder sb = new StringBuilder();
+            String location = null;
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (ch == '\n') {
+                    location = sb.toString();
+                    break;
+                }
+                sb.append((char) ch);
+            }
+            if (ch == -1) {
+                location = sb.toString();
+            }
             try {
                 if (location == null || location.isBlank()) {
                     throw new IOException("Название локации не может быть пустым.");
@@ -469,15 +662,15 @@ public class InputFunctions {
                 return location.trim();
             } catch (IOException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
-                if (CurrentInput.getInputStream() != System.in){
+                if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
                 }
             }
         }
     }
 
-    public static void output(String message){
-        if (CurrentInput.getInputStream() == System.in){
+    public static void output(String message) {
+        if (CurrentInput.getInputStream() == System.in) {
             System.out.print(message);
         }
     }

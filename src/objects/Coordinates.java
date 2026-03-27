@@ -2,16 +2,29 @@ package objects;
 
 import java.util.Objects;
 
+/**
+ * Класс координаты продукта.
+ */
 public class Coordinates {
     private Integer x; //Значение поля должно быть больше -352, Поле не может быть null
     private float y; //Значение поля должно быть больше -765
     private static final float eps = 0.000000001f;
 
+    /**
+     * Конструктор координаты продукта.
+     * @param x
+     * @param y
+     */
     public Coordinates(int x, float y) {
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Метод для проверки равенства двух вещественных чисел.
+     * @param other другое значение float.
+     * @return
+     */
     private Boolean compareFloat(float other) {
         if (Math.abs(x - y) < eps) {
             return true;

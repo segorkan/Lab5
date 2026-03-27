@@ -2,6 +2,9 @@ package objects;
 
 import java.util.Objects;
 
+/**
+ * Класс человека - владельца продукта.
+ */
 public class Person{
     private String name; //Поле не может быть null, Строка не может быть пустой
     private long weight; //Значение поля должно быть больше 0
@@ -10,6 +13,15 @@ public class Person{
     private Country nationality; //Поле не может быть null
     private Location location; //Поле может быть null
 
+    /**
+     * Конструктор человека.
+     * @param name
+     * @param weight
+     * @param eyeColor
+     * @param hairColor
+     * @param nationality
+     * @param location
+     */
     public Person(String name, long weight, Color eyeColor, Color hairColor, Country nationality, Location location) {
         this.name = name;
         this.weight = weight;
@@ -42,7 +54,11 @@ public class Person{
     public Location getLocation() {
         return this.location;
     }
-
+    /**
+     * Переопределение метода для проверки равенства двух людей.
+     * @param o объект с которым сравниваем.
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

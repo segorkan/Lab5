@@ -1,5 +1,6 @@
 
 import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class Main {
         console.addCommand("count_less_than_price", new Count());
         console.addCommand("filter_greater_than_unit_of_measure", new Filter());
 
-        Scanner sc = new Scanner(getInputStream());
+        InputStreamReader reader = new InputStreamReader(getInputStream());
 
         try {
             String csvPath = System.getenv("FILE_NAME");
@@ -58,15 +59,28 @@ public class Main {
         } catch (NoEnvironmentVariableException e) {
             System.out.println("Не существует переданной переменной окружения.");
             System.exit(1);
-        } catch (IOException | WrongFormatException e) {
+        } catch (WrongFormatException e) {
             System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());
             System.exit(1);
         }
 
         System.out.println("Все продукты перенесены. Можно вводить команды.");
-        while (sc.hasNext()) {
+        while (true) {
             try {
-                ArrayList<String> parts = new ArrayList<>(Arrays.asList(sc.nextLine().trim().split(" ")));
+                StringBuilder sb = new StringBuilder();
+                String command = null;
+                int ch;
+                while ((ch = reader.read()) != -1) {
+                    if (ch == '\n') {
+                        command = sb.toString();
+                        break;
+                    }
+                    sb.append((char) ch);
+                }
+                if (ch == -1) {
+                    command = sb.toString();
+                }
+                ArrayList<String> parts = new ArrayList<>(Arrays.asList(command.trim().split(" ")));
                 Iterator<String> it = parts.iterator();
                 while (it.hasNext()) {
                     String cur = it.next();

@@ -38,16 +38,16 @@ public class CommandHandler {
      * Реализация команды add.
      * @param reader поток для чтения
      */
-    public void add(InputStreamReader reader) {
+    public void add(InputStreamReader reader) throws IOException {
         CollectionHandler.getInstance().addElement(makeElement(reader, true));
     }
 
     /**
      * Реализация команды add_if_min.
-     * @param sc сканер
+     * @param reader входной поток
      */
-    public void addMin(Scanner sc) {
-        Product newProduct = makeElement(sc, false);
+    public void addMin(InputStreamReader reader) throws IOException {
+        Product newProduct = makeElement(reader, false);
         try {
             Product minProduct = CollectionHandler.getInstance().getMin();
             if (newProduct.compareTo(minProduct) < 0) {
@@ -62,13 +62,13 @@ public class CommandHandler {
 
     /**
      * Реализация команды update.
-     * @param sc сканер
+     * @param reader входной поток
      * @param id id изменяемого элемента
      */
-    public void update(Scanner sc, int id) {
+    public void update(InputStreamReader reader, int id) throws IOException{
         try {
             Product oldProduct = CollectionHandler.getInstance().findById(id);
-            Product changedProduct = makeElement(sc, false);
+            Product changedProduct = makeElement(reader, false);
             oldProduct.setCoordinates(changedProduct.getCoordinates());
             oldProduct.setName(changedProduct.getName());
             oldProduct.setOwner(changedProduct.getOwner());
@@ -95,10 +95,10 @@ public class CommandHandler {
 
     /**
      * Реализация команды remove_lower.
-     * @param sc сканер
+     * @param reader входной поток
      */
-    public void removeLower(Scanner sc) {
-        Product compareProduct = makeElement(sc, false);
+    public void removeLower(InputStreamReader reader) throws IOException {
+        Product compareProduct = makeElement(reader, false);
         Iterator<Product> it = CollectionHandler.getInstance().getCollection().iterator();
         while (it.hasNext()) {
             if (it.next().compareTo(compareProduct) < 0) {
@@ -187,14 +187,29 @@ public class CommandHandler {
      */
     public void execute(Path filePath) throws IOException {
         InputStream original = CurrentInput.getInputStream();
-        try (InputStream reader = Files.newInputStream(filePath)){
-            CurrentInput.changeInputStream(reader);
-            InputStreamReader charReader = new InputStreamReader(reader);
-            Scanner sc = new Scanner(charReader);
+        try (InputStream inputStream = Files.newInputStream(filePath)){
+            CurrentInput.changeInputStream(inputStream);
+            InputStreamReader reader = new InputStreamReader(inputStream);
             ConsoleHandler console = ConsoleHandler.getInstance();
             try {
-                while (sc.hasNext()) {
-                    ArrayList<String> parts = new ArrayList<>(Arrays.asList(sc.nextLine().trim().split(" ")));
+                int ch = 0;
+                while (ch != -1) {
+                    StringBuilder sb = new StringBuilder();
+                    String command = null;
+                    while ((ch = reader.read()) != -1) {
+                        if (ch == '\n') {
+                            command = sb.toString();
+                            break;
+                        }
+                        sb.append((char) ch);
+                    }
+                    if (ch == -1) {
+                        if (sb.isEmpty()){
+                            break;
+                        }
+                        command = sb.toString();
+                    }
+                    ArrayList<String> parts = new ArrayList<>(Arrays.asList(command.trim().split(" ")));
                     Iterator<String> it = parts.iterator();
                     while (it.hasNext()) {
                         String cur = it.next();
@@ -232,7 +247,7 @@ public class CommandHandler {
                     System.exit(1);
                 }
             } catch (IllegalArgumentException e){
-                System.out.println("(In-Script) " + "Значение обязано быть из списка: (KILOGRAMS, CENTIMETRES, SQUARE_METERS)");
+                System.out.println("(In-Script) " + "Значение обязано быть из списка.");
                 if (CurrentInput.getInputStream() != System.in){
                     System.exit(1);
                 }
@@ -243,7 +258,6 @@ public class CommandHandler {
 
     /**
      * Вызов реализации из обработчика CSV.
-     * @throws IOException
      */
     public void save() throws IOException {
         CSVHandler.getInstance().write();
@@ -279,8 +293,8 @@ public class CommandHandler {
     }
 
     /**
-     * Создание элемента из исходного файла.
-     * @param sc сканер.
+     * Создание элемента из исходного csv-файла.
+     * @param reader входной поток
      * @return Возвращает созданный {@link Product}.
      */
     public Product makeElementFromCSV(InputStreamReader reader) throws IOException{
@@ -288,11 +302,11 @@ public class CommandHandler {
             int id = validateId(reader);
             String name = validateName(reader);
             Coordinates coords = validateCoordinates(reader);
-            Date date = validateDate(sc);
-            Float price = validatePrice(sc);
-            String partNumber = validatePartNumber(sc);
-            UnitOfMeasure unitofMeasure = validateUnitOfMeasure(sc);
-            Person owner = validatePerson(sc);
+            Date date = validateDate(reader);
+            Float price = validatePrice(reader);
+            String partNumber = validatePartNumber(reader);
+            UnitOfMeasure unitofMeasure = validateUnitOfMeasure(reader);
+            Person owner = validatePerson(reader);
             return new Product(id, name, coords, date, price, partNumber, unitofMeasure, owner);
         } catch (IOException | NumberFormatException | CommandNotFoundException e) {
             System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());

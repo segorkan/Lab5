@@ -5,6 +5,7 @@ import exceptions.FileProblemException;
 import exceptions.NoEnvironmentVariableException;
 import exceptions.WrongFormatException;
 import objects.Product;
+import static Constants.csvHeader;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -75,6 +76,7 @@ public class CSVHandler {
                         parseProduct(fields);
                         System.out.printf("Ввод строки %d завершён.%n", count);
                     }
+                    Product.incrementGlobalId();
                 } catch (Exception e) {
                     throw new WrongFormatException("Проблема с данными в исходном файле. Последний продукт некорректен.");
                 }
@@ -102,15 +104,15 @@ public class CSVHandler {
             InputStream original = CurrentInput.getInputStream();
             CurrentInput.changeInputStream(Files.newInputStream(newObject));
             CommandHandler commandHandler = CommandHandler.getInstance();
-            Scanner sc = new Scanner(CurrentInput.getInputStream());
-            Product product = commandHandler.makeElementFromCSV(sc);
+            InputStreamReader reader = new InputStreamReader(CurrentInput.getInputStream());
+            Product product = commandHandler.makeElementFromCSV(reader);
             Product.setGlobalId(Math.max(Product.getGlobalId(), product.getId()));
             CurrentInput.changeInputStream(original);
-            if (sc.hasNextLine()) {
-                sc.close();
+            if (reader.read() != -1) {
+                reader.close();
                 throw new IOException("Проблема с данными в исходном файле. Последний продукт некорректен.");
             }
-            sc.close();
+            reader.close();
             CollectionHandler.getInstance().addElement(product);
         }
     }
@@ -132,6 +134,10 @@ public class CSVHandler {
                 try (BufferedOutputStream writer = new BufferedOutputStream(
                         Files.newOutputStream(csvPath, StandardOpenOption.TRUNCATE_EXISTING))) {
 
+                    writer.write(("ID;Имя продукта;Координата X;Координата Y;Дата создания;" +
+                            "Цена;Номер продукта;Единица измерения;Владелец(Y/N);" +
+                            "Имя владельца;Вес владельца;Цвет глаз;Цвет волос;Национальность;" +
+                            "Местоположение(Y/N);Координата X;Координата Y;Название локации" + "\n").getBytes(StandardCharsets.UTF_8));
                     for (Product product : CollectionHandler.getInstance().getCollection()) {
 
                         StringBuilder productMembers = new StringBuilder();
@@ -168,13 +174,14 @@ public class CSVHandler {
                                 productMembers.append("Y").append(";");
                                 productMembers.append(Integer.toString(product.getOwner().getLocation().getX())).append(";");
                                 productMembers.append(Float.toString(product.getOwner().getLocation().getY())).append(";");
-                                productMembers.append(product.getOwner().getLocation().getName()).append(";");
+                                productMembers.append(product.getOwner().getLocation().getName());
                             } else {
                                 productMembers.append("N");
                             }
                         } else {
                             productMembers.append("N");
                         }
+                        productMembers.append("\n");
                         writer.write(productMembers.toString().getBytes(StandardCharsets.UTF_8));
                     }
                 }

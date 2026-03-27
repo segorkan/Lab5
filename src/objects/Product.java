@@ -18,6 +18,16 @@ public class Product implements Comparable<Product> {
     private static int idCount = 0;
     private static final float eps = 0.000000001f;
 
+    /**
+     * Обычный конструктор элемента коллекции.
+     * @param name
+     * @param coordinates
+     * @param price
+     * @param partNumber
+     * @param unitOfMeasure
+     * @param owner
+     * @param isNew
+     */
     public Product(String name, Coordinates coordinates, Float price, String partNumber,
                    UnitOfMeasure unitOfMeasure, Person owner, boolean isNew) {
         this.id = idCount;
@@ -33,6 +43,17 @@ public class Product implements Comparable<Product> {
         }
     }
 
+    /**
+     * Конструктор элемента, добавляемого из csv-файла.
+     * @param id
+     * @param name
+     * @param coordinates
+     * @param creationDate
+     * @param price
+     * @param partNumber
+     * @param unitOfMeasure
+     * @param owner
+     */
     public Product(int id, String name, Coordinates coordinates, Date creationDate, Float price, String partNumber,
                    UnitOfMeasure unitOfMeasure, Person owner){
         this.id = id;
@@ -113,6 +134,10 @@ public class Product implements Comparable<Product> {
         this.owner = owner;
     }
 
+    /**
+     * Определение метода из интерфейса Comparable для сравнения продуктов.
+     * @param other
+     */
     @Override
     public int compareTo(Product other){
         if (getPrice() == null && other.getPrice() == null){
@@ -130,6 +155,11 @@ public class Product implements Comparable<Product> {
         return Float.compare(getPrice(), other.getPrice());
     }
 
+    /**
+     * Переопределение метода для проверки равенства двух продуктов.
+     * @param o объект с которым сравниваем.
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -156,6 +186,12 @@ public class Product implements Comparable<Product> {
                 "\t" + "Owner = %s" + "\n" + "]"
                 , getName(), getCoordinates(), getDate(), getPrice(), getPartNumber(), getUnitOfMeasure(), getOwner());
     }
+
+    /**
+     * Метод для проверки равенства двух вещественных чисел.
+     * @param other другое значение float
+     * @return
+     */
     private Boolean compareFloat(float other) {
         if (Math.abs(price - other) < eps) {
             return true;

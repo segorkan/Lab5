@@ -2,6 +2,8 @@ package commands;
 
 import interfaces.ElementCreator;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class Update extends Command implements ElementCreator {
@@ -11,9 +13,9 @@ public class Update extends Command implements ElementCreator {
     }
 
     @Override
-    public void execute(String argument) throws NumberFormatException {
+    public void execute(String argument) throws NumberFormatException, IOException {
         int id = Integer.parseInt(argument.trim());
-        Scanner sc = new Scanner(getStreamInput());
-        getCommandHandler().update(sc, id);
+        InputStreamReader reader = new InputStreamReader(getStreamInput());
+        getCommandHandler().update(reader, id);
     }
 }

@@ -2,12 +2,21 @@ package objects;
 
 import java.util.Objects;
 
+/**
+ * Класс локации человека.
+ */
 public class Location {
     private int x;
     private float y;
     private String name; //Длина строки не должна быть больше 563, Поле не может быть null
     private static final float eps = 0.000000001f;
 
+    /**
+     * Конструктор локации.
+     * @param x
+     * @param y
+     * @param name
+     */
     public Location(int x, float y, String name){
         this.x = x;
         this.y = y;
@@ -33,18 +42,22 @@ public class Location {
         return this.name;
     }
 
+    /**
+     * Переопределение метода для проверки равенства двух локаций.
+     * @param o объект с которым сравниваем.
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Location product = (Location) o;
-        return Objects.equals(getX(), product.getX()) && compareFloat(product.getY()) &&
-                Objects.equals(getName(), product.getName());
+        return Objects.equals(getName(), product.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getX(), getY(), getName());
+        return Objects.hash(getName());
     }
 
     @Override
