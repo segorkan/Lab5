@@ -13,6 +13,9 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 
+/**
+ * Класс для взаимодействия с csv файлом.
+ */
 public class CSVHandler {
 
     private static CSVHandler instance;

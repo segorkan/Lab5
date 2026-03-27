@@ -2,6 +2,9 @@ package auxiliary;
 
 import java.io.InputStream;
 
+/**
+ * Класс для хранения и изменения текущего входного потока.
+ */
 public class CurrentInput {
     private static InputStream stream;
 
