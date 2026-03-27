@@ -6,6 +6,9 @@ public class MaxByOwner extends Command{
         super();
     }
 
+    /**
+     * Перенаправление реализации команды max_by_owner.
+     */
     @Override
     public void execute() {
         getCommandHandler().maxByOwner();

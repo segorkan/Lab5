@@ -3,7 +3,6 @@ package auxiliary;
 import exceptions.*;
 import objects.*;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -326,5 +325,12 @@ public class CommandHandler {
         for (Product elem : CollectionHandler.getInstance().getCollection()) {
             System.out.println(elem.toString());
         }
+    }
+
+    /**
+     * Реализация команды info.
+     */
+    public void info(){
+        CollectionHandler.getInstance().printInfo();
     }
 }

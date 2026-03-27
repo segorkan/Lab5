@@ -12,6 +12,11 @@ public class RemoveLower extends Command implements ElementCreator {
         super();
     }
 
+    /**
+     * Перенаправление реализации команды remove_lower.
+     *
+     * @throws IOException
+     */
     @Override
     public void execute() throws IOException {
         InputStreamReader reader = new InputStreamReader(getStreamInput());

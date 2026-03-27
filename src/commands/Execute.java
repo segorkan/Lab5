@@ -12,27 +12,33 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 import java.util.Scanner;
 
-public class Execute extends Command{
+public class Execute extends Command {
 
-    public Execute(){
+    public Execute() {
         super();
     }
 
+    /**
+     * Перенаправление реализации команды execute.
+     *
+     * @param argument
+     * @throws IOException
+     * @throws FileProblemException
+     * @throws WrongFormatException
+     */
     @Override
-    public void execute(String argument) throws IOException, FileProblemException, WrongFormatException{
+    public void execute(String argument) throws IOException, FileProblemException, WrongFormatException {
         Path filePath = Paths.get(argument);
-        if (Files.exists(filePath)){
-            if (Files.isReadable(filePath) && Files.isRegularFile(filePath)){
+        if (Files.exists(filePath)) {
+            if (Files.isReadable(filePath) && Files.isRegularFile(filePath)) {
                 if (!filePath.getFileName().toString().toLowerCase().endsWith(".txt")) {
                     throw new WrongFormatException();
                 }
                 getCommandHandler().execute(filePath);
-            }
-            else {
+            } else {
                 throw new FileProblemException("Передан неверный файл: файл нельзя прочитать.");
             }
-        }
-        else {
+        } else {
             throw new IOException("Переданного файла не существует.");
         }
     }

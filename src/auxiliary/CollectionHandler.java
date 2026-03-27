@@ -1,8 +1,6 @@
 package auxiliary;
 
 import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import java.time.format.TextStyle;
 import java.util.*;
 
 import exceptions.NoElementFoundException;

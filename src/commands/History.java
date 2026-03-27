@@ -12,6 +12,9 @@ public class History extends Command{
         this.historyGetter = historyGetter;
     }
 
+    /**
+     * Перенаправление реализации команды history.
+     */
     @Override
     public void execute() {
         getCommandHandler().history(historyGetter.getHistory(), historyPrintSize);

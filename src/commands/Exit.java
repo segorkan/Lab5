@@ -1,11 +1,14 @@
 package commands;
 
-public class Exit extends Command{
+public class Exit extends Command {
 
-    public Exit(){
+    public Exit() {
         super();
     }
 
+    /**
+     * Перенаправление реализации команды exit.
+     */
     @Override
     public void execute() {
         getCommandHandler().exit();

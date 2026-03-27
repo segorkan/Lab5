@@ -1,11 +1,8 @@
 
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
 
-import java.util.Scanner;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;

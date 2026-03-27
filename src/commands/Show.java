@@ -8,6 +8,9 @@ public class Show extends Command {
         super();
     }
 
+    /**
+     * Перенаправление реализации команды show.
+     */
     @Override
     public void execute() {
         getCommandHandler().show();

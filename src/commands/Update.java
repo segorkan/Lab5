@@ -12,6 +12,13 @@ public class Update extends Command implements ElementCreator {
         super();
     }
 
+    /**
+     * Перенаправление реализации команды update.
+     *
+     * @param argument
+     * @throws NumberFormatException
+     * @throws IOException
+     */
     @Override
     public void execute(String argument) throws NumberFormatException, IOException {
         int id = Integer.parseInt(argument.trim());

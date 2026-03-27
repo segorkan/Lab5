@@ -23,6 +23,9 @@ public class Help extends Command {
         super();
     }
 
+    /**
+     * Реализация команды help.
+     */
     @Override
     public void execute() {
         System.out.println(Help.message);

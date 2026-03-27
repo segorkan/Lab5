@@ -10,12 +10,17 @@ import static auxiliary.InputFunctions.*;
 
 import objects.Product;
 
+
 public class Add extends Command implements ElementCreator {
 
     public Add() {
         super();
     }
 
+    /**
+     * Перенаправление реализации команды add.
+     * @throws IOException
+     */
     @Override
     public void execute() throws IOException {
         InputStreamReader reader = new InputStreamReader(getStreamInput());

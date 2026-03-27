@@ -10,6 +10,11 @@ public class Remove extends Command implements ElementCreator {
         super();
     }
 
+    /**
+     * Перенаправление реализации команды remove_by_id.
+     * @param argument
+     * @throws NumberFormatException
+     */
     @Override
     public void execute(String argument) throws NumberFormatException{
         int id = Integer.parseInt(argument.trim());

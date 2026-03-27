@@ -1,7 +1,6 @@
 package auxiliary;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 
 public class CurrentInput {
     private static InputStream stream;

@@ -1,11 +1,9 @@
 package auxiliary;
 
-import com.opencsv.*;
 import exceptions.FileProblemException;
 import exceptions.NoEnvironmentVariableException;
 import exceptions.WrongFormatException;
 import objects.Product;
-import static Constants.csvHeader;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -14,8 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
-import java.util.Scanner;
-import java.util.ArrayList;
 
 public class CSVHandler {
 
