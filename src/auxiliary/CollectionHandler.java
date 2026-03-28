@@ -118,8 +118,29 @@ public class CollectionHandler {
      * @return {@link Person} владелец
      */
     public Person getMaxOwner() {
-        Comparator<Person> comparator = Comparator.nullsFirst(
-                Comparator.comparing(Person::getName).thenComparingDouble(Person::getWeight));
+
+        /**
+         * Компаратор для сравнения двух людей. Сортировка сначала по весу, а потом по имени.
+         */
+        Comparator<Person> comparator= new Comparator<Person>() {
+            @Override
+            public int compare(Person a, Person b) {
+                if (a == null && b == null){
+                    return 0;
+                }
+                if (a == null){
+                    return  -1;
+                }
+                if (b == null){
+                    return 1;
+                }
+                if (a.getWeight() == b.getWeight()){
+                    return a.getName().compareTo(b.getName());
+                }
+                return Long.compare(a.getWeight(), b.getWeight());
+            }
+        };
+
         ArrayList<Person> owners = new ArrayList<Person>();
         for (Product element : getInstance().getCollection()){
             owners.add(element.getOwner());

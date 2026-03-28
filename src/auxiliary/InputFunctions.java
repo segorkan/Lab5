@@ -141,6 +141,7 @@ public class InputFunctions {
                 return null;
             }
             try {
+                pricestring = pricestring.replace(',', '.');
                 Float price = Float.parseFloat(pricestring.trim());
                 if (price <= 0) {
                     throw new IOException("Цена price должна быть больше 0.");
@@ -284,6 +285,7 @@ public class InputFunctions {
                 ystring = sb.toString();
             }
             try {
+                ystring = ystring.replace(',', '.');
                 float y = Float.parseFloat(ystring.trim());
                 if (y <= -765) {
                     throw new IOException("Y должен быть больше -765");
@@ -616,6 +618,7 @@ public class InputFunctions {
                 ystring = sb.toString();
             }
             try {
+                ystring = ystring.replace(',', '.');
                 float y = Float.parseFloat(ystring.trim());
                 return y;
             } catch (NumberFormatException e) {

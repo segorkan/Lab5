@@ -15,7 +15,7 @@ public class CurrentInput {
     }
 
     /**
-     * Изменяет текущий входной поток.
+     * Изменяет текущий входной поток и обертку для ввода символов.
      * @param stream входной поток.
      */
     public static void changeInputStream(InputStream stream) {
@@ -30,6 +30,10 @@ public class CurrentInput {
         return CurrentInput.stream;
     }
 
+    /**
+     * Возвращает обертку входного потока для ввода символов.
+     * @return
+     */
     public static InputStreamReader getInputStreamReader(){
         return CurrentInput.reader;
     }

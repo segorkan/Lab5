@@ -54,6 +54,10 @@ public class ConsoleHandler implements HistoryGetter {
         return getInstance().history;
     }
 
+    /**
+     * Добавить команду в историю команд.
+     * @param command
+     */
     public void addToHistory(String command){
         getHistory().add(command);
     }

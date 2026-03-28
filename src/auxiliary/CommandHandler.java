@@ -76,6 +76,9 @@ public class CommandHandler {
             oldProduct.setUnitOfMeasure(changedProduct.getUnitOfMeasure());
         } catch (NoElementFoundException e) {
             System.out.println("Элемент с данным id не найден.");
+            if (CurrentInput.getInputStream() != System.in){
+                System.exit(1);
+            }
         }
     }
 
@@ -89,6 +92,9 @@ public class CommandHandler {
             CollectionHandler.getInstance().removeElement(oldProduct);
         } catch (NoElementFoundException e) {
             System.out.println("Элемент с данным id не найден.");
+            if (CurrentInput.getInputStream() != System.in){
+                System.exit(1);
+            }
         }
     }
 
@@ -123,6 +129,9 @@ public class CommandHandler {
             }
         } catch (NoElementFoundException e) {
             System.out.println("В коллекции нет элементов.");
+            if (CurrentInput.getInputStream() != System.in){
+                System.exit(1);
+            }
         }
     }
 
@@ -253,6 +262,9 @@ public class CommandHandler {
                 if (CurrentInput.getInputStream() != System.in){
                     System.exit(1);
                 }
+            } catch (StackOverflowError e){
+                System.out.println("(In-Script) " + "Возникла бесконечная рекурсия.");
+                Runtime.getRuntime().halt(1);
             }
         }
         CurrentInput.changeInputStream(original);
@@ -315,7 +327,7 @@ public class CommandHandler {
             System.exit(1);
             return null;
         } catch (Exception e){
-            System.out.println("Исключение");
+            System.out.println(e.getMessage());
             System.exit(1);
             return null;
         }
