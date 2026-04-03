@@ -1,5 +1,6 @@
 package commands;
 
+import auxiliary.ConsoleHandler;
 import auxiliary.CurrentInput;
 import exceptions.FileProblemException;
 import exceptions.WrongFormatException;
@@ -34,15 +35,22 @@ public class Execute extends Command {
                 if (!filePath.getFileName().toString().toLowerCase().endsWith(".txt")) {
                     throw new WrongFormatException();
                 }
+                if (ConsoleHandler.getInstance().getScriptList().contains(filePath.toString())){
+                    System.out.println("Запрещен рекурсивный ввод.");
+                    System.exit(1);
+                }
+                ConsoleHandler.getInstance().addScript(filePath.toString());
                 System.out.println("Начинаю выполнение " + filePath);
                 getCommandHandler().execute(filePath);
                 getConsoleHandler().addToHistory("execute");
                 System.out.println("Выполнение скрипта закончено.");
+                ConsoleHandler.getInstance().removeLastScript();
             } else {
                 throw new FileProblemException("Передан неверный файл: файл нельзя прочитать.");
             }
         } else {
             throw new IOException("Переданного файла не существует.");
         }
+        System.out.println("Команда выполнена успешно.");
     }
 }

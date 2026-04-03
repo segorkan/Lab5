@@ -26,6 +26,7 @@ public class Add extends Command implements ElementCreator {
         InputStreamReader reader = getStreamInput();
         getCommandHandler().add(reader);
         getConsoleHandler().addToHistory("add");
+        System.out.println("Добавление произошло успешно.");
     }
 
 }

@@ -17,5 +17,6 @@ public class Save extends Command {
     public void execute() throws IOException {
         getCommandHandler().save();
         getConsoleHandler().addToHistory("save");
+        System.out.println("Команда выполнена успешно.");
     }
 }

@@ -12,6 +12,7 @@ public class Coordinates {
 
     /**
      * Конструктор координаты продукта.
+     *
      * @param x
      * @param y
      */
@@ -22,6 +23,7 @@ public class Coordinates {
 
     /**
      * Метод для проверки равенства двух вещественных чисел.
+     *
      * @param other другое значение float.
      * @return
      */
@@ -55,6 +57,21 @@ public class Coordinates {
 
     @Override
     public String toString() {
-        return String.format("Coordinates[x = %d, y = %.5f]", getX(), getY());
+        return String.format("Coordinates[x = %d, y = %s]", getX(), formatFloat(getY()));
+    }
+
+    /**
+     * Метод для форматирования значения float.
+     *
+     * @param number значение для вывода.
+     * @return
+     */
+    private String formatFloat(float number){
+        String tempString = Float.toString(number);
+        String[] parts = tempString.split("\\.");
+        while (parts[1].length() < 5){
+            parts[1] += "0";
+        }
+        return parts[0] + "." + parts[1].substring(0, 4);
     }
 }

@@ -1,3 +1,4 @@
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
@@ -8,9 +9,7 @@ import java.util.Iterator;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 
-import auxiliary.CSVHandler;
-import auxiliary.CollectionHandler;
-import auxiliary.ConsoleHandler;
+import auxiliary.*;
 import commands.*;
 import exceptions.*;
 
@@ -39,7 +38,8 @@ public class Main {
         console.addCommand("count_less_than_price", new Count());
         console.addCommand("filter_greater_than_unit_of_measure", new Filter());
 
-        InputStreamReader reader = new InputStreamReader(getInputStream());
+        CurrentInput.changeInputStream(System.in);
+        InputStreamReader reader = CurrentInput.getInputStreamReader();
 
         try {
             String csvPath = System.getenv("FILE_NAME");

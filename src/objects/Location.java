@@ -13,11 +13,12 @@ public class Location {
 
     /**
      * Конструктор локации.
+     *
      * @param x
      * @param y
      * @param name
      */
-    public Location(int x, float y, String name){
+    public Location(int x, float y, String name) {
         this.x = x;
         this.y = y;
         this.name = name;
@@ -44,6 +45,7 @@ public class Location {
 
     /**
      * Переопределение метода для проверки равенства двух локаций.
+     *
      * @param o объект с которым сравниваем.
      * @return
      */
@@ -62,6 +64,21 @@ public class Location {
 
     @Override
     public String toString() {
-        return String.format("Location[x = %d, y = %.5f, name = %s]", getX(), getY(), getName());
+        return String.format("Location[x = %d, y = %s, name = %s]", getX(), formatFloat(getY()), getName());
+    }
+
+    /**
+     * Метод для форматирования значения float.
+     *
+     * @param number значение для вывода.
+     * @return
+     */
+    private String formatFloat(float number){
+        String tempString = Float.toString(number);
+        String[] parts = tempString.split("\\.");
+        while (parts[1].length() < 5){
+            parts[1] += "0";
+        }
+        return parts[0] + "." + parts[1].substring(0, 4);
     }
 }

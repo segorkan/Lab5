@@ -10,17 +10,13 @@ public class CurrentInput {
     private static InputStream stream;
     private static InputStreamReader reader;
 
-    static {
-        stream = System.in;
-    }
-
     /**
      * Изменяет текущий входной поток и обертку для ввода символов.
      * @param stream входной поток.
      */
     public static void changeInputStream(InputStream stream) {
         CurrentInput.stream = stream;
-        reader = new InputStreamReader(stream);
+        CurrentInput.reader = new InputStreamReader(stream);
     }
 
     /**

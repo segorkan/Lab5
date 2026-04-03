@@ -20,5 +20,6 @@ public class Remove extends Command implements ElementCreator {
         int id = Integer.parseInt(argument.trim());
         getCommandHandler().remove(id);
         getConsoleHandler().addToHistory("remove_by_id");
+        System.out.println("Команда выполнена успешно.");
     }
 }

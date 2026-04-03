@@ -180,11 +180,11 @@ public class Product implements Comparable<Product> {
                 "\t" + "name = %s" + "\n" +
                 "\t" + "coordinates = %s" + "\n" +
                 "\t" + "creationDate = %s" + "\n" +
-                "\t" + "price = %.5f" + "\n" +
+                "\t" + "price = %s" + "\n" +
                 "\t" + "partNumber = %s" + "\n" +
                 "\t" + "Unit Of Measure = %s" + "\n" +
                 "\t" + "Owner = %s" + "\n" + "]"
-                , getName(), getCoordinates(), getDate(), getPrice(), getPartNumber(), getUnitOfMeasure(), getOwner());
+                , getName(), getCoordinates(), getDate(), formatFloat(getPrice()), getPrice() == null ? "null" : getPartNumber(), getUnitOfMeasure(), getOwner());
     }
 
     /**
@@ -197,5 +197,19 @@ public class Product implements Comparable<Product> {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Метод для форматирования значения float.
+     * @param number значение для вывода.
+     * @return
+     */
+    private String formatFloat(float number){
+        String tempString = Float.toString(number);
+        String[] parts = tempString.split("\\.");
+        while (parts[1].length() < 5){
+            parts[1] += "0";
+        }
+        return parts[0] + "." + parts[1].substring(0, 4);
     }
 }

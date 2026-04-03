@@ -15,5 +15,6 @@ public class Show extends Command {
     public void execute() {
         getCommandHandler().show();
         getConsoleHandler().addToHistory("show");
+        System.out.println("Команда выполнена успешно.");
     }
 }

@@ -19,5 +19,6 @@ public class History extends Command{
     public void execute() {
         getCommandHandler().history(historyGetter.getHistory(), historyPrintSize);
         getConsoleHandler().addToHistory("history");
+        System.out.println("Команда выполнена успешно.");
     }
 }

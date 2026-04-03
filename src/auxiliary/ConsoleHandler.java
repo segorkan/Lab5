@@ -10,17 +10,19 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Класс, отвечающий за хранение команд и истории команд.
+ * Класс, отвечающий за хранение команд, истории команд и запущенных скриптов.
  */
 public class ConsoleHandler implements HistoryGetter {
 
     private static ConsoleHandler instance;
     private Map<String, Command> commandList;
     private Deque<String> history;
+    private Deque<String> scriptList;
 
     private ConsoleHandler() {
         this.commandList = new HashMap<String, Command>();
         this.history = new ArrayDeque<String>();
+        this.scriptList = new ArrayDeque<String>();
     }
 
     public static ConsoleHandler getInstance() {
@@ -37,6 +39,18 @@ public class ConsoleHandler implements HistoryGetter {
      */
     public void addCommand(String name, Command command) {
         getInstance().commandList.put(name, command);
+    }
+
+    public void addScript(String name){
+        getInstance().scriptList.add(name);
+    }
+
+    public Deque<String> getScriptList() {
+        return getInstance().scriptList;
+    }
+
+    public void removeLastScript(){
+        getInstance().scriptList.pop();
     }
 
     /**

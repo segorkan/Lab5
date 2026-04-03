@@ -10,5 +10,6 @@ public class Info extends Command{
     public void execute() {
         getCommandHandler().info();
         getConsoleHandler().addToHistory("info");
+        System.out.println("Команда выполнена успешно.");
     }
 }

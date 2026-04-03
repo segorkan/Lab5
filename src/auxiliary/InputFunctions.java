@@ -4,9 +4,11 @@ import objects.*;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Класс хранит функции для ввода и валидации полей классов.
@@ -36,6 +38,9 @@ public class InputFunctions {
                 name = sb.toString();
             }
             try {
+                if (name.trim().equals("keep") && !UpdateHandler.isVoid()){
+                    return UpdateHandler.getOldProduct().getName();
+                }
                 if (name == null || name.isBlank()) {
                     throw new IOException("Имя не может быть пустым.");
                 }
@@ -137,6 +142,9 @@ public class InputFunctions {
             if (ch == -1) {
                 pricestring = sb.toString();
             }
+            if (pricestring.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getPrice();
+            }
             if (pricestring == null || pricestring.isBlank()) {
                 return null;
             }
@@ -146,7 +154,14 @@ public class InputFunctions {
                 if (price <= 0) {
                     throw new IOException("Цена price должна быть больше 0.");
                 }
-                return price;
+                String[] parts = pricestring.trim().split("\\.");
+                if (parts.length == 1){
+                    return price;
+                }
+                while (parts[1].length() < 4){
+                    parts[1] += "0";
+                }
+                return Float.parseFloat(parts[0] + "." + parts[1].substring(0, 4));
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "price обязана иметь тип float.");
                 if (CurrentInput.getInputStream() != System.in) {
@@ -182,6 +197,9 @@ public class InputFunctions {
             }
             if (ch == -1) {
                 partNumber = sb.toString();
+            }
+            if (partNumber.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getPartNumber();
             }
             try {
                 if (partNumber == null || partNumber.isBlank()) {
@@ -235,6 +253,9 @@ public class InputFunctions {
             if (ch == -1) {
                 xstring = sb.toString();
             }
+            if (xstring.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getCoordinates().getX();
+            }
             if (xstring == null || xstring.isBlank()) {
                 System.out.println("Координата X не может быть пустой.");
                 if (CurrentInput.getInputStream() != System.in) {
@@ -243,11 +264,18 @@ public class InputFunctions {
                 continue;
             }
             try {
-                int x = Integer.parseInt(xstring.trim());
-                if (x <= -352) {
-                    throw new IOException("X должен быть больше -352");
+                xstring = xstring.replace(',', '.');
+                double xd = Double.parseDouble(xstring.trim());
+                int x = (int)xd;
+                if (x == xd){
+                    if (x <= -352) {
+                        throw new IOException("X должен быть больше -352");
+                    }
+                    return x;
                 }
-                return x;
+                else{
+                    throw new NumberFormatException();
+                }
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "X обязана иметь тип int.");
                 if (CurrentInput.getInputStream() != System.in) {
@@ -284,13 +312,23 @@ public class InputFunctions {
             if (ch == -1) {
                 ystring = sb.toString();
             }
+            if (ystring.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getCoordinates().getY();
+            }
             try {
                 ystring = ystring.replace(',', '.');
                 float y = Float.parseFloat(ystring.trim());
                 if (y <= -765) {
                     throw new IOException("Y должен быть больше -765");
                 }
-                return y;
+                String[] parts = ystring.trim().split("\\.");
+                if (parts.length == 1){
+                    return y;
+                }
+                while (parts[1].length() < 4){
+                    parts[1] += "0";
+                }
+                return Float.parseFloat(parts[0] + "." + parts[1].substring(0, 4));
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "Y обязан иметь тип float.");
                 if (CurrentInput.getInputStream() != System.in) {
@@ -313,7 +351,7 @@ public class InputFunctions {
      */
     public static UnitOfMeasure validateUnitOfMeasure(InputStreamReader reader) throws IOException {
         while (true) {
-            output("Введите единицу измерения (возможны KILOGRAMS, CENTIMETERS, SQUARE_METERS):");
+            output("Введите единицу измерения (возможны KILOGRAMS (1), CENTIMETERS (2), SQUARE_METERS (3)):");
             StringBuilder sb = new StringBuilder();
             String unit = null;
             int ch;
@@ -327,6 +365,9 @@ public class InputFunctions {
             if (ch == -1) {
                 unit = sb.toString();
             }
+            if (unit.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getUnitOfMeasure();
+            }
             try {
                 if (unit == null || unit.isBlank()) {
                     throw new IOException("Единица измерения не может быть пустой.");
@@ -338,6 +379,10 @@ public class InputFunctions {
                     System.exit(1);
                 }
             } catch (IllegalArgumentException e) {
+                ArrayList<String> numbers = new ArrayList<>(List.of("1", "2", "3"));
+                if (numbers.contains(unit.trim())){
+                    return UnitOfMeasure.values()[Integer.parseInt(unit.trim()) - 1];
+                }
                 System.out.println(e.getClass().getSimpleName() + ": " + "Значение обязано быть из списка.");
                 if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
@@ -369,7 +414,10 @@ public class InputFunctions {
                 if (ch == -1) {
                     answer = sb.toString();
                 }
-                if (answer.trim().equals("Y")) {
+                if (answer.trim().equals("keep") && !UpdateHandler.isVoid()){
+                    return UpdateHandler.getOldProduct().getOwner();
+                }
+                if (answer.trim().toUpperCase().equals("Y")) {
                     output("Начинаю ввод владельца.");
                     String name = validateName(reader);
                     long weight = validateWeight(reader);
@@ -378,7 +426,7 @@ public class InputFunctions {
                     Country nationality = validateNationality(reader);
                     Location location = validateLocation(reader);
                     return new Person(name, weight, eyeColor, hairColor, nationality, location);
-                } else if (answer.trim().equals("N")) {
+                } else if (answer.trim().toUpperCase().equals("N")) {
                     return null;
                 } else {
                     throw new IOException("Ответ должен быть Y или N.");
@@ -414,6 +462,9 @@ public class InputFunctions {
             if (ch == -1) {
                 weightstring = sb.toString();
             }
+            if (weightstring.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getOwner().getWeight();
+            }
             if (weightstring == null || weightstring.trim().isEmpty()) {
                 System.out.println("Вес человека не может быть null.");
                 if (CurrentInput.getInputStream() != System.in) {
@@ -422,11 +473,18 @@ public class InputFunctions {
                 continue;
             }
             try {
-                long weight = Long.parseLong(weightstring.trim());
-                if (weight <= 0) {
-                    throw new IOException("Вес человека должен быть > 0.");
+                weightstring = weightstring.replace(',', '.');
+                double weightDouble = Double.parseDouble(weightstring.trim());
+                long weight = (long)weightDouble;
+                if (weight == weightDouble){
+                    if (weight <= 0) {
+                        throw new IOException("Вес человека должен быть > 0.");
+                    }
+                    return weight;
                 }
-                return weight;
+                else{
+                    throw new NumberFormatException();
+                }
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "Вес обязан иметь тип long.");
                 if (CurrentInput.getInputStream() != System.in) {
@@ -450,7 +508,7 @@ public class InputFunctions {
      */
     public static Color validateColor(InputStreamReader reader, String addition) throws IOException {
         while (true) {
-            output("Введите цвет " + addition + " (возможны RED, BLACK, BLUE, WHITE, ORANGE, BROWN):");
+            output("Введите цвет " + addition + " (возможны RED (1), BLACK (2), BLUE (3), WHITE (4), ORANGE (5), BROWN (6)):");
             StringBuilder sb = new StringBuilder();
             String color = null;
             int ch;
@@ -464,12 +522,24 @@ public class InputFunctions {
             if (ch == -1) {
                 color = sb.toString();
             }
+            if (color.trim().equals("keep") && !UpdateHandler.isVoid()){
+                if (addition.equals("глаза")){
+                    return UpdateHandler.getOldProduct().getOwner().getEyeColor();
+                }
+                else {
+                    return UpdateHandler.getOldProduct().getOwner().getHairColor();
+                }
+            }
             try {
                 if (color == null || color.isBlank()) {
                     return null;
                 }
                 return Color.valueOf(color.trim());
             } catch (IllegalArgumentException e) {
+                ArrayList<String> numbers = new ArrayList<>(List.of("1", "2", "3", "4", "5", "6"));
+                if (numbers.contains(color.trim())){
+                    return Color.values()[Integer.parseInt(color.trim()) - 1];
+                }
                 System.out.println(e.getClass().getSimpleName() + ": " + "Значение обязано быть из списка.");
                 if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
@@ -486,7 +556,7 @@ public class InputFunctions {
      */
     public static Country validateNationality(InputStreamReader reader) throws IOException {
         while (true) {
-            output("Введите национальность (возможны UNITED_KINGDOM, GERMANY, SPAIN, VATICAN, JAPAN):");
+            output("Введите национальность (возможны UNITED_KINGDOM (1), GERMANY (2), SPAIN (3), VATICAN (4), JAPAN (5)):");
             StringBuilder sb = new StringBuilder();
             String country = null;
             int ch;
@@ -500,6 +570,9 @@ public class InputFunctions {
             if (ch == -1) {
                 country = sb.toString();
             }
+            if (country.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getOwner().getNationality();
+            }
             try {
                 if (country == null || country.isBlank()) {
                     throw new IOException("Национальность не может быть пустой.");
@@ -511,6 +584,10 @@ public class InputFunctions {
                     System.exit(1);
                 }
             } catch (IllegalArgumentException e) {
+                ArrayList<String> numbers = new ArrayList<>(List.of("1", "2", "3", "4", "5"));
+                if (numbers.contains(country.trim())){
+                    return Country.values()[Integer.parseInt(country.trim()) - 1];
+                }
                 System.out.println(e.getClass().getSimpleName() + ": " + "Значение обязано быть из списка.");
                 if (CurrentInput.getInputStream() != System.in) {
                     System.exit(1);
@@ -542,12 +619,15 @@ public class InputFunctions {
                 if (ch == -1) {
                     answer = sb.toString();
                 }
-                if (answer.trim().equals("Y")) {
+                if (answer.trim().equals("keep") && !UpdateHandler.isVoid()){
+                    return UpdateHandler.getOldProduct().getOwner().getLocation();
+                }
+                if (answer.trim().toUpperCase().equals("Y")) {
                     int x = validateLocationX(reader);
                     float y = validateLocationY(reader);
                     String name = validateLocationName(reader);
                     return new Location(x, y, name);
-                } else if (answer.trim().equals("N")) {
+                } else if (answer.trim().toUpperCase().equals("N")) {
                     return null;
                 } else {
                     throw new IOException("Ответ должен быть Y или N.");
@@ -583,9 +663,19 @@ public class InputFunctions {
             if (ch == -1) {
                 xstring = sb.toString();
             }
+            if (xstring.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getOwner().getLocation().getX();
+            }
             try {
-                int x = Integer.parseInt(xstring.trim());
-                return x;
+                xstring = xstring.replace(',', '.');
+                double xd = Double.parseDouble(xstring.trim());
+                int x = (int)xd;
+                if (x == xd){
+                    return x;
+                }
+                else{
+                    throw new NumberFormatException();
+                }
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "X обязан иметь тип int.");
                 if (CurrentInput.getInputStream() != System.in) {
@@ -617,10 +707,20 @@ public class InputFunctions {
             if (ch == -1) {
                 ystring = sb.toString();
             }
+            if (ystring.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getOwner().getLocation().getY();
+            }
             try {
                 ystring = ystring.replace(',', '.');
                 float y = Float.parseFloat(ystring.trim());
-                return y;
+                String[] parts = ystring.trim().split("\\.");
+                if (parts.length == 1){
+                    return y;
+                }
+                while (parts[1].length() < 4){
+                    parts[1] += "0";
+                }
+                return Float.parseFloat(parts[0] + "." + parts[1].substring(0, 4));
             } catch (NumberFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + "Y обязан иметь тип float.");
                 if (CurrentInput.getInputStream() != System.in) {
@@ -651,6 +751,9 @@ public class InputFunctions {
             }
             if (ch == -1) {
                 location = sb.toString();
+            }
+            if (location.trim().equals("keep") && !UpdateHandler.isVoid()){
+                return UpdateHandler.getOldProduct().getOwner().getLocation().getName();
             }
             try {
                 if (location == null || location.isBlank()) {

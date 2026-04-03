@@ -67,6 +67,7 @@ public class CommandHandler {
     public void update(InputStreamReader reader, int id) throws IOException{
         try {
             Product oldProduct = CollectionHandler.getInstance().findById(id);
+            UpdateHandler.setProduct(oldProduct);
             Product changedProduct = makeElement(reader, false);
             oldProduct.setCoordinates(changedProduct.getCoordinates());
             oldProduct.setName(changedProduct.getName());
@@ -74,6 +75,7 @@ public class CommandHandler {
             oldProduct.setPrice(changedProduct.getPrice());
             oldProduct.setPartNumber(changedProduct.getPartNumber());
             oldProduct.setUnitOfMeasure(changedProduct.getUnitOfMeasure());
+            UpdateHandler.setVoid();
         } catch (NoElementFoundException e) {
             System.out.println("Элемент с данным id не найден.");
             if (CurrentInput.getInputStream() != System.in){
@@ -337,8 +339,18 @@ public class CommandHandler {
      * Реализация команды show.
      */
     public void show() {
+        ArrayList<Product> arr = new ArrayList<Product>();
         for (Product elem : CollectionHandler.getInstance().getCollection()) {
-            System.out.println(elem.toString());
+            arr.add(elem);
+        }
+        Collections.sort(arr);
+        if (!arr.isEmpty()) {
+            for (Product elem : arr) {
+                System.out.println(elem);
+            }
+        }
+        else{
+            System.out.println("Массив пуст.");
         }
     }
 
