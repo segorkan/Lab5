@@ -19,7 +19,6 @@ public class Main {
     public static void main(String[] args) {
 
         ConsoleHandler console = ConsoleHandler.getInstance();
-        CollectionHandler collectionHandler = CollectionHandler.getInstance();
 
         console.addCommand("help", new Help());
         console.addCommand("info", new Info());
@@ -96,9 +95,11 @@ public class Main {
                 } else if (parts.size() == 2) {
                     if (console.getCommandList().containsKey(parts.get(0))) {
                         console.executeCommand(parts.get(0), parts.get(1));
+                    } else{
+                        throw new CommandNotFoundException("Команда не была найдена");
                     }
                 } else {
-                    throw new IOException("Неверное количество аргументов.");
+                    throw new IOException("В команде не может быть больше 2 аргументов.");
                 }
             } catch (IOException | CommandNotFoundException | FileProblemException | WrongFormatException e) {
                 System.out.println(e.getClass().getSimpleName() + ": " + e.getMessage());

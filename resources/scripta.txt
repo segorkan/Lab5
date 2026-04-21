@@ -1,0 +1,3 @@
+info
+execute_script resources/scriptb.txt
+help

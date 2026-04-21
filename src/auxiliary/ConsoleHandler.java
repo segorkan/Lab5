@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Класс, отвечающий за хранение команд, истории команд и запущенных скриптов.
+ * Класс, отвечающий за хранение команд, истории команд и списка запущенных скриптов.
  */
 public class ConsoleHandler implements HistoryGetter {
 
@@ -25,6 +25,9 @@ public class ConsoleHandler implements HistoryGetter {
         this.scriptList = new ArrayDeque<String>();
     }
 
+    /**
+     * Вернуть экземпляр ConsoleHandler.
+     */
     public static ConsoleHandler getInstance() {
         if (ConsoleHandler.instance == null) {
             ConsoleHandler.instance = new ConsoleHandler();
@@ -41,10 +44,17 @@ public class ConsoleHandler implements HistoryGetter {
         getInstance().commandList.put(name, command);
     }
 
+    /**
+     * Добавляет скрипт в конец списка открытых скриптов.
+     * @param name имя скрипта
+     */
     public void addScript(String name){
         getInstance().scriptList.add(name);
     }
 
+    /**
+     * Вернуть список с открытыми скриптами.
+     */
     public Deque<String> getScriptList() {
         return getInstance().scriptList;
     }

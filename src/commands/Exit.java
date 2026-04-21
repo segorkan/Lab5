@@ -13,6 +13,6 @@ public class Exit extends Command {
     public void execute() {
         getCommandHandler().exit();
         getConsoleHandler().addToHistory("exit");
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }

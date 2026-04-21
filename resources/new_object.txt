@@ -1,9 +1,18 @@
-4
-apple
+1
+serg
 -350
--760.0
-27/03/2026 23:04
-0.2
-djdjsajdklsajkldjaskljdklasj
-KILOGRAMS
-N
+-760.3213
+21/04/2026 15:47
+321.0
+dksoakdjsadjsjadjsoajdijsadjksajdksa
+CENTIMETERS
+Y
+mike
+3213
+BLUE
+WHITE
+UNITED_KINGDOM
+Y
+321
+3.0
+dj

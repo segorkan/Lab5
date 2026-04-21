@@ -22,6 +22,6 @@ public class AddMin extends Command implements ElementCreator{
         InputStreamReader reader = getStreamInput();
         getCommandHandler().addMin(reader);
         getConsoleHandler().addToHistory("add_if_min");
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }

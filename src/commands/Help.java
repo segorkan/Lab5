@@ -30,6 +30,6 @@ public class Help extends Command {
     public void execute() {
         System.out.println(Help.message);
         getConsoleHandler().addToHistory("help");
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }

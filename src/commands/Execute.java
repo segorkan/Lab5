@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Execute extends Command {
 
@@ -28,7 +29,7 @@ public class Execute extends Command {
      * @throws WrongFormatException
      */
     @Override
-    public void execute(String argument) throws IOException, FileProblemException, WrongFormatException {
+    public void execute(String argument) throws IOException, FileProblemException, WrongFormatException, StackOverflowError {
         Path filePath = Paths.get(argument);
         if (Files.exists(filePath)) {
             if (Files.isReadable(filePath) && Files.isRegularFile(filePath)) {
@@ -36,8 +37,7 @@ public class Execute extends Command {
                     throw new WrongFormatException();
                 }
                 if (ConsoleHandler.getInstance().getScriptList().contains(filePath.toString())){
-                    System.out.println("Запрещен рекурсивный ввод.");
-                    System.exit(1);
+                    throw new StackOverflowError("Запрещен рекурсивный вызов.");
                 }
                 ConsoleHandler.getInstance().addScript(filePath.toString());
                 System.out.println("Начинаю выполнение " + filePath);
@@ -51,6 +51,6 @@ public class Execute extends Command {
         } else {
             throw new IOException("Переданного файла не существует.");
         }
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }

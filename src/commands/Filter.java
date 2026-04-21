@@ -19,6 +19,6 @@ public class Filter extends Command {
         UnitOfMeasure unitOfMeasure = UnitOfMeasure.valueOf(argument.trim());
         getCommandHandler().filter(unitOfMeasure);
         getConsoleHandler().addToHistory("filter_greater_than_unit_of_measure");
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }

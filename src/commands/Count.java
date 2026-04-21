@@ -23,6 +23,6 @@ public class Count extends Command {
         }
         getCommandHandler().countLessThanPrice(price);
         getConsoleHandler().addToHistory("count_less_than_price");
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }

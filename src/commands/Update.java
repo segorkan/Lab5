@@ -27,6 +27,6 @@ public class Update extends Command implements ElementCreator {
         System.out.println("Введите keep если хотите сохранить значение.");
         getCommandHandler().update(reader, id);
         getConsoleHandler().addToHistory("update");
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }

@@ -13,6 +13,6 @@ public class MaxByOwner extends Command{
     public void execute() {
         getCommandHandler().maxByOwner();
         getConsoleHandler().addToHistory("max_by_owner");
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }

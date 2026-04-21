@@ -14,6 +14,6 @@ public class Clear extends Command {
     public void execute(){
         getCommandHandler().clear();
         getConsoleHandler().addToHistory("clear");
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }

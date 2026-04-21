@@ -180,7 +180,7 @@ public class CommandHandler {
         System.out.printf("Начинаю вывод последних %d команд.%n", historyPrintSize);
         Iterator<String> it = history.descendingIterator();
         int count = 0;
-        ArrayList<String> printHistory = new ArrayList<String>();
+        ArrayList<String> printHistory = new ArrayList<>();
         while (count < edge) {
             printHistory.add(it.next());
             count++;
@@ -244,7 +244,7 @@ public class CommandHandler {
                         throw new IOException("Неверное количество аргументов.");
                     }
                 }
-            } catch (IOException | CommandNotFoundException | FileProblemException | WrongFormatException e) {
+            } catch (IOException | CommandNotFoundException | FileProblemException | WrongFormatException | StackOverflowError e) {
                 System.out.println("(In-Script) " + e.getClass().getSimpleName() + ": " + e.getMessage());
                 if (CurrentInput.getInputStream() != System.in){
                     System.exit(1);
@@ -264,9 +264,6 @@ public class CommandHandler {
                 if (CurrentInput.getInputStream() != System.in){
                     System.exit(1);
                 }
-            } catch (StackOverflowError e){
-                System.out.println("(In-Script) " + "Возникла бесконечная рекурсия.");
-                Runtime.getRuntime().halt(1);
             }
         }
         CurrentInput.changeInputStream(original);

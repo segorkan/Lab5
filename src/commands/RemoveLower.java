@@ -22,6 +22,6 @@ public class RemoveLower extends Command implements ElementCreator {
         InputStreamReader reader = getStreamInput();
         getCommandHandler().removeLower(reader);
         getConsoleHandler().addToHistory("remove_lower");
-        System.out.println("Команда выполнена успешно.");
+        System.out.println("Команда выполнена.");
     }
 }
