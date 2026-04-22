@@ -141,7 +141,7 @@ public class CollectionHandler {
             }
         };
 
-        ArrayList<Person> owners = new ArrayList<Person>();
+        ArrayList<Person> owners = new ArrayList<>();
         for (Product element : getInstance().getCollection()){
             owners.add(element.getOwner());
         }

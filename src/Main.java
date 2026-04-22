@@ -108,7 +108,7 @@ public class Main {
             } catch (ConditionsNotMetException e) {
                 System.out.println("Цена обязана быть больше 0.");
             } catch (IllegalArgumentException e) {
-                System.out.println("Значение обязано быть из списка: (KILOGRAMS, CENTIMETRES, SQUARE_METERS)");
+                System.out.println("Значение обязано быть из списка.");
             }
         }
     }

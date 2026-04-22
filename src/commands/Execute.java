@@ -34,7 +34,7 @@ public class Execute extends Command {
         if (Files.exists(filePath)) {
             if (Files.isReadable(filePath) && Files.isRegularFile(filePath)) {
                 if (!filePath.getFileName().toString().toLowerCase().endsWith(".txt")) {
-                    throw new WrongFormatException();
+                    throw new WrongFormatException("Неверный формат файла.");
                 }
                 if (ConsoleHandler.getInstance().getScriptList().contains(filePath.toString())){
                     throw new StackOverflowError("Запрещен рекурсивный вызов.");
@@ -46,7 +46,7 @@ public class Execute extends Command {
                 System.out.println("Выполнение скрипта закончено.");
                 ConsoleHandler.getInstance().removeLastScript();
             } else {
-                throw new FileProblemException("Передан неверный файл: файл нельзя прочитать.");
+                throw new FileProblemException("Файл нельзя прочитать.");
             }
         } else {
             throw new IOException("Переданного файла не существует.");

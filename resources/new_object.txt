@@ -1,18 +1,9 @@
-1
-serg
+2
+ser
 -350
--760.3213
-21/04/2026 15:47
-321.0
-dksoakdjsadjsjadjsoajdijsadjksajdksa
-CENTIMETERS
-Y
-mike
-3213
-BLUE
-WHITE
-UNITED_KINGDOM
-Y
-321
-3.0
-dj
+-100.4343
+21/04/2026 18:03
+3213.0
+dsasdakdlskdslkdlksldkslkdlskdksldklskdlskld
+SQUARE_METERS
+N
