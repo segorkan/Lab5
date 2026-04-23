@@ -1,0 +1,341 @@
+@startuml
+
+interface ElementCreator {
+  + getStreamInput() : InputStreamReader
+}
+
+interface HistoryGetter {
+  + getHistory() : Deque<String>
+}
+
+enum Color {
+  RED
+  BLACK
+  BLUE
+  WHITE
+  ORANGE
+  BROWN
+}
+
+enum Country {
+  UNITED_KINGDOM
+  GERMANY
+  SPAIN
+  VATICAN
+  JAPAN
+}
+
+enum UnitOfMeasure {
+  KILOGRAMS
+  CENTIMETERS
+  SQUARE_METERS
+}
+
+class Coordinates {
+  - x : Integer
+  - y : float
+  - eps : float
+  + Coordinates(x: int, y: float)
+  + getX() : Integer
+  + getY() : float
+  + equals(o: Object) : boolean
+  + hashCode() : int
+  + toString() : String
+}
+
+class Location {
+  - x : int
+  - y : float
+  - name : String
+  - eps : float
+  + Location(x: int, y: float, name: String)
+  + getX() : int
+  + getY() : float
+  + getName() : String
+  + equals(o: Object) : boolean
+  + hashCode() : int
+  + toString() : String
+}
+
+class Person {
+  - name : String
+  - weight : long
+  - eyeColor : Color
+  - hairColor : Color
+  - nationality : Country
+  - location : Location
+  + Person(name, weight, eyeColor, hairColor, nationality, location)
+  + getName() : String
+  + getWeight() : long
+  + getEyeColor() : Color
+  + getHairColor() : Color
+  + getNationality() : Country
+  + getLocation() : Location
+  + equals(o: Object) : boolean
+  + hashCode() : int
+  + toString() : String
+}
+
+class Product {
+  - id : int
+  - name : String
+  - coordinates : Coordinates
+  - creationDate : Date
+  - price : Float
+  - partNumber : String
+  - unitOfMeasure : UnitOfMeasure
+  - owner : Person
+  - {static} idCount : int
+  + Product(name, coords, price, partNumber, uom, owner, isNew)
+  + Product(id, name, coords, date, price, partNumber, uom, owner)
+  + {static} incrementGlobalId()
+  + {static} getGlobalId() : int
+  + {static} setGlobalId(id: int)
+  + getId() : int
+  + getName() : String
+  + setName(name: String)
+  + getCoordinates() : Coordinates
+  + setCoordinates(coords: Coordinates)
+  + getDate() : Date
+  + getPrice() : Float
+  + setPrice(price: Float)
+  + getPartNumber() : String
+  + setPartNumber(partNumber: String)
+  + getUnitOfMeasure() : UnitOfMeasure
+  + setUnitOfMeasure(uom: UnitOfMeasure)
+  + getOwner() : Person
+  + setOwner(owner: Person)
+  + compareTo(other: Product) : int
+  + equals(o: Object) : boolean
+  + hashCode() : int
+  + toString() : String
+}
+
+class CollectionHandler {
+  - {static} instance : CollectionHandler
+  - collection : LinkedHashSet<Product>
+  - creationDate : LocalDateTime
+  - CollectionHandler()
+  + {static} getInstance() : CollectionHandler
+  + getCollection() : LinkedHashSet<Product>
+  + getCreationDate() : String
+  + printInfo() : String
+  + addElement(product: Product)
+  + removeElement(product: Product)
+  + findById(id: int) : Product
+  + getMin() : Product
+  + getMaxOwner() : Person
+}
+
+class CommandHandler {
+  - {static} instance : CommandHandler
+  - CommandHandler()
+  + {static} getInstance() : CommandHandler
+  + add(reader: InputStreamReader)
+  + addMin(reader: InputStreamReader)
+  + update(reader: InputStreamReader, id: int)
+  + remove(id: int)
+  + removeLower(reader: InputStreamReader)
+  + maxByOwner()
+  + countLessThanPrice(price: float)
+  + filter(unitOfMeasure: UnitOfMeasure)
+  + clear()
+  + history(history: Deque<String>, n: int)
+  + execute(filePath: Path)
+  + save()
+  + exit()
+  + makeElement(reader, isNew) : Product
+  + makeElementFromCSV(reader) : Product
+  + show()
+  + info()
+}
+
+class ConsoleHandler {
+  - {static} instance : ConsoleHandler
+  - commandList : Map<String, Command>
+  - history : Deque<String>
+  - scriptList : Deque<String>
+  - ConsoleHandler()
+  + {static} getInstance() : ConsoleHandler
+  + addCommand(name: String, command: Command)
+  + addScript(name: String)
+  + getScriptList() : Deque<String>
+  + removeLastScript()
+  + getCommandList() : Map
+  + getHistory() : Deque<String>
+  + addToHistory(command: String)
+  + executeCommand(command: String)
+  + executeCommand(command: String, argument: String)
+}
+
+class CSVHandler {
+  - {static} instance : CSVHandler
+  - CSVHandler()
+  + {static} getInstance() : CSVHandler
+  + read(csvPath: Path)
+  + parseProduct(line: String[])
+  + write()
+}
+
+class CurrentInput {
+  - {static} stream : InputStream
+  - {static} reader : InputStreamReader
+  + {static} changeInputStream(stream: InputStream)
+  + {static} getInputStream() : InputStream
+  + {static} getInputStreamReader() : InputStreamReader
+}
+
+class UpdateHandler {
+  - {static} oldProduct : Product
+  + {static} getOldProduct() : Product
+  + {static} setProduct(product: Product)
+  + {static} setVoid()
+  + {static} isVoid() : Boolean
+}
+
+abstract class Command {
+  - commandHandler : CommandHandler
+  - consoleHandler : ConsoleHandler
+  # Command()
+  # getCommandHandler() : CommandHandler
+  # getConsoleHandler() : ConsoleHandler
+  + execute()
+  + execute(argument: String)
+}
+
+class Add {
+  + Add()
+  + execute()
+}
+
+class AddMin {
+  + AddMin()
+  + execute()
+}
+
+class Clear {
+  + Clear()
+  + execute()
+}
+
+class Count {
+  + Count()
+  + execute(argument: String)
+}
+
+class Execute {
+  + Execute()
+  + execute(argument: String)
+}
+
+class Exit {
+  + Exit()
+  + execute()
+}
+
+class Filter {
+  + Filter()
+  + execute(argument: String)
+}
+
+class Help {
+  - {static} message : String
+  + Help()
+  + execute()
+}
+
+class History {
+  - {static} historyPrintSize : int
+  - historyGetter : HistoryGetter
+  + History(historyGetter: HistoryGetter)
+  + execute()
+}
+
+class Info {
+  + Info()
+  + execute()
+}
+
+class MaxByOwner {
+  + MaxByOwner()
+  + execute()
+}
+
+class Remove {
+  + Remove()
+  + execute(argument: String)
+}
+
+class RemoveLower {
+  + RemoveLower()
+  + execute()
+}
+
+class Save {
+  + Save()
+  + execute()
+}
+
+class Show {
+  + Show()
+  + execute()
+}
+
+class Update {
+  + Update()
+  + execute(argument: String)
+}
+
+' Enums
+Product --> UnitOfMeasure
+Product --> Coordinates
+Product --> Person
+Person --> Color
+Person --> Country
+Person --> Location
+
+' Interfaces
+ConsoleHandler ..|> HistoryGetter
+Product ..|> Comparable
+
+' Singletons
+CollectionHandler "1" o-- "0..*" Product
+CommandHandler ..> CollectionHandler
+CommandHandler ..> CSVHandler
+CommandHandler ..> CurrentInput
+CommandHandler ..> UpdateHandler
+ConsoleHandler ..> CommandHandler
+CSVHandler ..> CollectionHandler
+CSVHandler ..> CommandHandler
+CSVHandler ..> CurrentInput
+UpdateHandler --> Product
+
+' Command hierarchy
+Add --|> Command
+AddMin --|> Command
+Clear --|> Command
+Count --|> Command
+Execute --|> Command
+Exit --|> Command
+Filter --|> Command
+Help --|> Command
+History --|> Command
+Info --|> Command
+MaxByOwner --|> Command
+Remove --|> Command
+RemoveLower --|> Command
+Save --|> Command
+Show --|> Command
+Update --|> Command
+
+' ElementCreator
+Add ..|> ElementCreator
+AddMin ..|> ElementCreator
+Remove ..|> ElementCreator
+RemoveLower ..|> ElementCreator
+Update ..|> ElementCreator
+
+' History uses HistoryGetter
+History --> HistoryGetter
+
+@enduml
